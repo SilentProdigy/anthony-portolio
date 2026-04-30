@@ -1,73 +1,175 @@
-# React + TypeScript + Vite
+# 🚀 Anthony Mark Lopez — Portfolio Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, full-width portfolio built with **React + TypeScript (Vite)** showcasing web development, design, and custom business systems.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🌐 Live Preview
 
-## React Compiler
+👉 https://your-portfolio-link.com
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🧠 About This Project
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+This portfolio is designed to present my work as a **Fullstack Developer, Designer, and Creative Builder**.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+It highlights:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+* Custom web applications (PWA, POS, SaaS)
+* WordPress & WooCommerce solutions
+* Shopify storefront customization
+* UI/UX and graphic design work
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+The goal is simple:
+👉 **Showcase premium digital solutions that drive real business results.**
+
+---
+
+## ⚙️ Tech Stack
+
+* ⚛️ React JS
+* 🟦 TypeScript
+* ⚡ Vite
+* 🎨 Custom CSS (no framework)
+* 🧩 Lucide Icons
+
+---
+
+## ✨ Features
+
+* ✅ Full-width modern layout
+* 🌙 Dark / Light mode toggle
+* 📱 Fully responsive (mobile-first)
+* 🔍 Project filtering + search
+* 🎯 Conversion-focused UI sections
+* 🧠 Clean component structure
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+ ├── assets/
+ │   └── img/
+ │       └── profile-photo.png
+ ├── App.tsx
+ ├── main.tsx
+ └── index.css
+
+public/
+ └── (static assets)
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🚀 Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/your-portfolio.git
+cd your-portfolio
 ```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Run development server
+
+```bash
+npm run dev
+```
+
+### 4. Build for production
+
+```bash
+npm run build
+```
+
+---
+
+## 🖼️ Customization Guide
+
+### Update Profile Photo
+
+```tsx
+import profilePhoto from "./assets/img/profile-photo.png";
+```
+
+---
+
+### Update Projects
+
+Edit the `projects` array inside:
+
+```
+App.tsx
+```
+
+---
+
+### Update Content
+
+Modify:
+
+* Services
+* Skills
+* About section
+* Contact email
+
+---
+
+## 📈 Performance Goals
+
+* ⚡ Fast load times
+* 📱 Mobile-first UX
+* 🧠 Clean codebase
+* 🔍 SEO-ready structure
+
+---
+
+## 💼 Services Offered
+
+* Web Development (React, Next.js, Custom Systems)
+* WordPress & WooCommerce Development
+* Shopify Customization
+* Progressive Web Apps (PWA)
+* UI/UX & Graphic Design
+
+---
+
+## 📬 Contact
+
+📧 [your-email@example.com](mailto:your-email@example.com)
+🌐 https://your-portfolio-link.com
+
+---
+
+## 🧩 Future Improvements
+
+* Case study pages per project
+* Blog / content marketing section
+* Animation upgrades (micro-interactions)
+* CMS integration (optional)
+
+---
+
+## 🪪 License
+
+This project is open-source and available under the MIT License.
+
+---
+
+## ⭐ Final Note
+
+This portfolio is not just a showcase —
+it’s built as a **conversion tool** to attract high-value clients and projects.
+
+---
+
+🔥 If you like this project, consider giving it a star.
