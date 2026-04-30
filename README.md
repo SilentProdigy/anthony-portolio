@@ -145,8 +145,8 @@ Modify:
 
 ## 📬 Contact
 
-📧 [your-email@example.com](mailto:your-email@example.com)
-🌐 https://your-portfolio-link.com
+📧 [lopez.anthonymark16@gmail.com](mailto:lopez.anthonymark16@gmail.com)
+🌐 https://anthony-portolio.vercel.app/
 
 ---
 
