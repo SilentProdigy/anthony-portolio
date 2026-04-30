@@ -305,7 +305,7 @@ export default function PortfolioWebsite() {
           .section-head { align-items: flex-start; flex-direction: column; }
         }
         @media (max-width: 720px) {
-          .container { width: min(100% - 28px, 1160px); }
+          .container { width: min(100% - 28px, 1160px); padding:0px; }
           .nav-links, .nav-cta { display: none; }
           .menu-btn { display: inline-grid; place-items: center; }
           .mobile-menu { display: grid; gap: 14px; padding: 0 0 22px; font-size: 15px; }
