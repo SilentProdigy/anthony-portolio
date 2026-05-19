@@ -109,6 +109,14 @@ const projects = [
     image: "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=1200&q=80",
     tags: ["React", "Firebase", "POS"],
     url: "https://eagles-wings-pos.vercel.app/",
+  },
+  {
+    category: "Car Rental Tracker PWA - Mobile First",
+    title: "FleeTracker - Smart Car Rental Management",
+    desc: "A mobile-first PWA for car rental businesses featuring real-time fleet tracking, booking management, customer profiles, and performance analytics, all optimized for seamless use on smartphones and tablets.",
+    image: "public/assets/img/fleetrackr-mobile-app.png",
+    tags: ["React", "Supabase", "Mobile-First", "PWA"],
+    url: "https://fleetrackr.vercel.app/",
   }
 ];
 
