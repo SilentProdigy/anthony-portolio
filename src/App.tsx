@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import profilePhoto from "./assets/img/profile-photo.png";
+import fleeTrackr from "./assets/img/fleetrackr-mobile-app.png";
 import {
   ArrowUpRight,
   Code2,
@@ -114,7 +115,7 @@ const projects = [
     category: "Car Rental Tracker PWA - Mobile First",
     title: "FleeTracker - Smart Car Rental Management",
     desc: "A mobile-first PWA for car rental businesses featuring real-time fleet tracking, booking management, customer profiles, and performance analytics, all optimized for seamless use on smartphones and tablets.",
-    image: "public/assets/img/fleetrackr-mobile-app.png",
+    image: fleeTrackr,
     tags: ["React", "Supabase", "Mobile-First", "PWA"],
     url: "https://fleetrackr.vercel.app/",
   }
