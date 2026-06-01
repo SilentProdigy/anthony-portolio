@@ -93,7 +93,7 @@ const projects = [
     desc: "A custom shortcode-based WooCommerce gallery with AJAX filters, search sidebar, admin settings, and responsive layout.",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
     tags: ["PHP", "AJAX", "WooCommerce"],
-    url: "https://inlightconnect.com",
+    url: "https://drive.google.com/drive/folders/17jHrtm6O4bCeqKLqvRwFaeW7WuKiPdHY?usp=drive_link",
   },
   {
     category: "Graphic Design",
