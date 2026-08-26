@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import profilePhoto from "./assets/img/profile-photo.png";
 import fleeTrackr from "./assets/img/fleetrackr-mobile-app.png";
+import vouxr from "./assets/img/vouxr-banner.png";
 import {
   ArrowUpRight,
   Code2,
@@ -118,6 +119,14 @@ const projects = [
     image: fleeTrackr,
     tags: ["React", "Supabase", "Mobile-First", "PWA"],
     url: "https://fleetrackr.vercel.app/",
+  },
+  {
+    category: "Vouxr - Mr. Hebrews Cafe Rewards PWA",
+    title: "Vouxr - Mr. Hebrews Cafe Rewards",
+    desc: "A mobile-first PWA for managing cafe rewards and loyalty programs, featuring seamless integration with existing systems and a user-friendly interface.",
+    image: vouxr,
+    tags: ["React", "Supabase", "Mobile-First", "PWA"],
+    url: "https://vouxr-ai.vercel.app/",
   }
 ];
 
