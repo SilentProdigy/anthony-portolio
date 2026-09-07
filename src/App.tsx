@@ -143,22 +143,6 @@ export default function PortfolioWebsite() {
   const [darkMode, setDarkMode] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All");
   const [search, setSearch] = useState("");
-  const [copied, setCopied] = useState(false);
-
-  const email = "lopez.anthonymark16@gmail.com";
-  const mailtoHref = `mailto:${email}?subject=${encodeURIComponent("Project inquiry")}`;
-
-  // Copy the address alongside the mailto so the contact still works when the
-  // browser or OS has no mail handler registered (the link silently no-ops there).
-  const handleEmailClick = () => {
-    navigator.clipboard?.writeText(email).then(
-      () => {
-        setCopied(true);
-        window.setTimeout(() => setCopied(false), 2600);
-      },
-      () => {}
-    );
-  };
 
   const navItems = ["Services", "Skills", "Projects", "Process", "Contact"];
   const categories = ["All", ...Array.from(new Set(projects.map((project) => project.category)))];
@@ -355,13 +339,6 @@ export default function PortfolioWebsite() {
           .process-card p { font-size: 17px; }
           .footer-inner { flex-direction: column; }
         }
-
-        .email-toast {
-          position: fixed; left: 50%; bottom: 28px; transform: translateX(-50%);
-          background: var(--text); color: var(--bg); padding: 12px 20px;
-          border-radius: 999px; font-size: 14px; font-weight: 500;
-          box-shadow: 0 10px 30px rgba(0,0,0,.18); z-index: 999;
-        }
       `}</style>
 
       <nav className="nav">
@@ -383,7 +360,7 @@ export default function PortfolioWebsite() {
             <button className="icon-btn" onClick={() => setDarkMode(!darkMode)} aria-label="Toggle dark mode">
               {darkMode ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            <a className="nav-cta" href={mailtoHref} onClick={handleEmailClick}>
+            <a className="nav-cta" href="mailto:lopez.anthonymark16@gmail.com">
               Work with me <ArrowUpRight size={16} />
             </a>
             <button className="menu-btn" onClick={() => setOpen(!open)} aria-label="Toggle menu">
@@ -551,7 +528,7 @@ export default function PortfolioWebsite() {
               <h2>Need a website, system, or creative campaign that feels premium?</h2>
               <p>Let’s build a custom digital solution that fits your business, looks professional, and performs across every device.</p>
             </div>
-            <a className="btn btn-light" href={mailtoHref} onClick={handleEmailClick}>
+            <a className="btn btn-light" href="mailto:lopez.anthonymark16@gmail.com">
               <Mail size={18} /> Contact Me
             </a>
           </div>
@@ -564,8 +541,6 @@ export default function PortfolioWebsite() {
           <span>Web Development • Web Design • Graphic Design</span>
         </div>
       </footer>
-
-      {copied && <div className="email-toast">Email copied — {email}</div>}
     </main>
   );
 }
