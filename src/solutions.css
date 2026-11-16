@@ -26,26 +26,6 @@
 .solution-hero-actions { display: flex; gap: 11px; flex-wrap: wrap; }
 .solution-assurance { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 13px; margin-top: 28px; color: #596c8f; font-size: 11px; font-weight: 800; }
 .solution-assurance svg { color: #3b60dc; }
-.solution-growth-diagram { background: white; border: 1px solid #e1e8fa; border-radius: 25px; padding: 22px; box-shadow: 0 36px 80px #334ba226; min-width: 0; position: relative; }
-.solution-growth-diagram:before { content: ''; inset: 0; position: absolute; pointer-events: none; opacity: .45; border-radius: inherit; background-image: radial-gradient(#d0dcf6 1px,transparent 1px); background-size: 18px 18px; mask-image: radial-gradient(ellipse,#0001,transparent 80%); }
-.solution-graphic-header { position: relative; display: flex; gap: 12px; align-items: center; padding-bottom: 17px; border-bottom: 1px solid #e9eef8; }
-.solution-graphic-icon { background: linear-gradient(135deg,#eaf0ff,#ede7ff); color: #4d57de; border-radius: 13px; display: grid; place-items: center; height: 46px; width: 46px; flex-shrink: 0; }
-.solution-graphic-header small, .solution-graphic-header strong { display: block; }
-.solution-graphic-header small { color: #8e9bb4; font-size: 9px; font-weight: 850; letter-spacing: .095em; }
-.solution-graphic-header strong { font-size: 17px; margin-top: 5px; letter-spacing: -.025em; }
-.solution-graphic-stage { position: relative; display: flex; flex-direction: column; align-items: stretch; padding: 20px 22px 11px; }
-.solution-graphic-card { position: relative; background: #f7f9ff; border: 1px solid #e1e9ff; border-radius: 15px; padding: 18px 20px; }
-.solution-graphic-card span, .solution-graphic-card strong { display: block; }
-.solution-graphic-card span { color: #667ea4; font-size: 9px; font-weight: 850; letter-spacing: .1em; margin-bottom: 8px; }
-.solution-graphic-card strong { color: #1a2b50; font: 800 16px/1.35 Manrope, sans-serif; letter-spacing: -.028em; }
-.solution-graphic-card.success { background: linear-gradient(135deg,#e6efff,#f0eafe); border-color: #cfd9ff; }
-.solution-graphic-center { position: relative; display: flex; align-items: center; justify-content: center; gap: 9px; color: #fff; border: 3px solid #fff; box-shadow: 0 8px 28px #3352b850; border-radius: 13px; padding: 15px 10px; background: linear-gradient(120deg,#2b65ec,#6940dc); }
-.solution-graphic-center strong { font-size: 13px; }
-.solution-graphic-connector { height: 30px; width: 2px; margin: 0 auto; position: relative; background: linear-gradient(#6fb4ed,#6945df); }
-.solution-graphic-connector span { position: absolute; border-radius: 50%; width: 7px; height: 7px; background: #6172ed; left: -2.5px; top: 4px; animation: solution-pulse 2.4s ease-in-out infinite; }
-@keyframes solution-pulse { 0% { transform: translateY(0); } 60%,100% { transform: translateY(18px); } }
-.solution-graphic-footer { display: flex; align-items: center; gap: 8px; border-top: 1px solid #e9eef8; color: #7787a2; font-size: 10px; font-weight: 700; padding-top: 15px; }
-.solution-graphic-footer svg { color: #486cdd; flex-shrink: 0; }
 .solution-section-heading { max-width: 780px; margin-bottom: 42px; }
 .solution-section-heading h2, .solution-faq-layout h2 { font-size: clamp(33px,4vw,53px); line-height: 1.13; letter-spacing: -.06em; margin: 0 0 15px; }
 .solution-section-heading p, .solution-faq-layout>div>p { font-size: 15px; color: #687792; line-height: 1.8; max-width: 700px; margin: 0; }
@@ -110,7 +90,6 @@
 @media (max-width: 1130px) {
   .solution-hero-grid { grid-template-columns: 1.03fr .97fr; gap: 34px; }
   .solution-growth-diagram { padding: 18px; }
-  .solution-graphic-stage { padding-inline: 0; }
   .solution-hero-copy h1 { font-size: clamp(36px,4vw,55px); }
 }
 @media (max-width: 900px) {
@@ -138,15 +117,12 @@
   .solution-hero-subtitle { font-size: 14px; }
   .solution-benefit-grid,.solution-deliverables-grid,.solution-process-grid,.solution-related-grid { grid-template-columns: 1fr; }
   .solution-section-heading h2, .solution-faq-layout h2 { font-size: 35px; }
-  .solution-graphic-stage { padding-inline: 0; }
-  .solution-graphic-footer { align-items: flex-start; }
   .solution-final-buttons { flex-direction: column; align-items: stretch; }
   .solution-final-buttons .button { text-align: center; }
   .solution-final-inner h2 { font-size: 37px; }
   .solution-related-card p { margin-bottom: 18px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .solution-graphic-connector span { animation: none !important; }
   .solution-related-card { transition: none; }
 }
 
