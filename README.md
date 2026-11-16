@@ -1,175 +1,35 @@
-# 🚀 Anthony Mark Lopez — Portfolio Website
+# Anthony Mark Lopez — Digital Services Landing Page
 
-A modern, full-width portfolio built with **React + TypeScript (Vite)** showcasing web development, design, and custom business systems.
+React + TypeScript + Vite landing page for Anthony Mark Lopez's digital services.
 
----
+**Development branch:** `feat/service-landing-page` — the existing `main` portfolio remains unchanged.
 
-## 🌐 Live Preview
+## Services
 
-👉 https://your-portfolio-link.com
+- GoHighLevel specialist (CRM, workflows, campaigns, funnels, and integrations)
+- Web specialist (custom development, WordPress, WooCommerce, Shopify, web apps/PWAs, CRO, SEO, and support)
+- Graphic design
+- Social media management
+- Technical support
 
----
+## Features
 
-## 🧠 About This Project
+- Responsive personal-brand hero using a portrait avatar
+- Animated service-to-outcome branching SVG (with pause control and reduced-motion support)
+- Service cards, web sub-services, projects, process, and FAQ
+- Accessible mobile navigation and consultation call-to-action
+- Consultation form currently creates a pre-filled email via `mailto:`. **It does not silently submit, collect, or store leads.** Connect a secure backend/GHL CRM workflow before describing the form as automated.
+- Real image assets for Vouxr and FleeTracker; Eagles-Wings POS has a clearly illustrative dashboard graphic
 
-This portfolio is designed to present my work as a **Fullstack Developer, Designer, and Creative Builder**.
-
-It highlights:
-
-* Custom web applications (PWA, POS, SaaS)
-* WordPress & WooCommerce solutions
-* Shopify storefront customization
-* UI/UX and graphic design work
-
-The goal is simple:
-👉 **Showcase premium digital solutions that drive real business results.**
-
----
-
-## ⚙️ Tech Stack
-
-* ⚛️ React JS
-* 🟦 TypeScript
-* ⚡ Vite
-* 🎨 Custom CSS (no framework)
-* 🧩 Lucide Icons
-
----
-
-## ✨ Features
-
-* ✅ Full-width modern layout
-* 🌙 Dark / Light mode toggle
-* 📱 Fully responsive (mobile-first)
-* 🔍 Project filtering + search
-* 🎯 Conversion-focused UI sections
-* 🧠 Clean component structure
-
----
-
-## 📁 Project Structure
-
-```
-src/
- ├── assets/
- │   └── img/
- │       └── profile-photo.png
- ├── App.tsx
- ├── main.tsx
- └── index.css
-
-public/
- └── (static assets)
-```
-
----
-
-## 🚀 Getting Started
-
-### 1. Clone the repository
+## Local development
 
 ```bash
-git clone https://github.com/your-username/your-portfolio.git
-cd your-portfolio
-```
-
-### 2. Install dependencies
-
-```bash
-npm install
-```
-
-### 3. Run development server
-
-```bash
+npm ci
 npm run dev
-```
-
-### 4. Build for production
-
-```bash
+npm run lint
 npm run build
 ```
 
----
+## Deployment safety
 
-## 🖼️ Customization Guide
-
-### Update Profile Photo
-
-```tsx
-import profilePhoto from "./assets/img/profile-photo.png";
-```
-
----
-
-### Update Projects
-
-Edit the `projects` array inside:
-
-```
-App.tsx
-```
-
----
-
-### Update Content
-
-Modify:
-
-* Services
-* Skills
-* About section
-* Contact email
-
----
-
-## 📈 Performance Goals
-
-* ⚡ Fast load times
-* 📱 Mobile-first UX
-* 🧠 Clean codebase
-* 🔍 SEO-ready structure
-
----
-
-## 💼 Services Offered
-
-* Web Development (React, Next.js, Custom Systems)
-* WordPress & WooCommerce Development
-* Shopify Customization
-* Progressive Web Apps (PWA)
-* UI/UX & Graphic Design
-
----
-
-## 📬 Contact
-
-📧 [lopez.anthonymark16@gmail.com](mailto:lopez.anthonymark16@gmail.com)
-🌐 https://anthony-portolio.vercel.app/
-
----
-
-## 🧩 Future Improvements
-
-* Case study pages per project
-* Blog / content marketing section
-* Animation upgrades (micro-interactions)
-* CMS integration (optional)
-
----
-
-## 🪪 License
-
-This project is open-source and available under the MIT License.
-
----
-
-## ⭐ Final Note
-
-This portfolio is not just a showcase —
-it’s built as a **conversion tool** to attract high-value clients and projects.
-
----
-
-🔥 If you like this project, consider giving it a star.
+Use Vercel preview deployments for `feat/service-landing-page`; do not merge into `main` or change the production branch until approved. Verify the Vercel project's production branch in settings before publishing any changes.
