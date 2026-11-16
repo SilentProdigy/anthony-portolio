@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, BarChart3, Check, ChevronDown, CircleCheck,
   ClipboardList, Code2, Headphones, Mail, Menu, Megaphone, Palette, ShieldCheck,
-  Sparkles, Target, Workflow, Pause, Play, X,
+  Target, Workflow, Pause, Play, X,
 } from 'lucide-react';
 import profilePhoto from './assets/img/anthony-portrait.webp';
 import { getSolution, solutions, solutionHref, type Solution } from './solutionContent';
 import './landing.css';
 import './solutions.css';
+import './solutionFlow.css';
 
 const icons = {
   'ghl-automation': Workflow,
