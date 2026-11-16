@@ -140,9 +140,8 @@ function SolutionSections({solution}:{solution:Solution}) {
 }
 
 export default function SolutionPage() {
-  const [pageReady,setPageReady]=useState(false);
   useEffect(()=>{
-    if (!currentSolution) {document.title='Page Not Found | Anthony Mark Lopez';setPageReady(true);return;}
+    if (!currentSolution) {document.title='Page Not Found | Anthony Mark Lopez';return;}
     document.title=`${currentSolution.name} Solutions for Business Growth | Anthony Mark Lopez`;
     const description=`${currentSolution.subtitle} Learn about challenges, business growth opportunities, deliverables, and how to get started.`;
     const meta=document.querySelector<HTMLMetaElement>('meta[name="description"]');
@@ -151,7 +150,6 @@ export default function SolutionPage() {
     if(title)title.content=document.title;
     const ogdesc=document.querySelector<HTMLMetaElement>('meta[property="og:description"]');
     if(ogdesc)ogdesc.content=description.slice(0,160);
-    setPageReady(true);
   },[]);
   return <div className="site-shell solution-page">
     <a className="skip-link" href="#main-content">Skip to content</a>
@@ -159,6 +157,5 @@ export default function SolutionPage() {
     {currentSolution ? <SolutionSections solution={currentSolution}/> : <main id="main-content" className="section"><div className="container solution-not-found"><ClipboardList size={42}/><h1>Solution page not found.</h1><p>The page you're looking for isn't available.</p><a className="button button-primary" href="/#solutions"><ArrowLeft size={17}/> Browse Solutions</a></div></main>}
     <footer className="footer"><div className="container footer-inner"><a href="/" className="footer-brand"><img src={profilePhoto} alt=""/> Anthony Mark Lopez</a><span>Digital solutions · Web · GHL · Design · Support</span><span>© {new Date().getFullYear()} All rights reserved.</span></div></footer>
     {currentSolution && <a href={contactHref(currentSolution)} className="mobile-sticky-cta"><ShieldCheck size={17} aria-hidden="true"/> Discuss Your Project <ArrowUpRight size={16} aria-hidden="true"/></a>}
-    <span className="solution-page-ready" hidden>{pageReady?'ready':'loading'}</span>
   </div>;
 }
