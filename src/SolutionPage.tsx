@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   ArrowLeft, ArrowRight, ArrowUpRight, BarChart3, Check, ChevronDown, CircleCheck,
   ClipboardList, Code2, Headphones, Mail, Menu, Megaphone, Palette, ShieldCheck,
-  Sparkles, Target, Workflow, X,
+  Sparkles, Target, Workflow, Pause, Play, X,
 } from 'lucide-react';
 import profilePhoto from './assets/img/anthony-portrait.webp';
 import { getSolution, solutions, solutionHref, type Solution } from './solutionContent';
@@ -51,17 +51,77 @@ function SolutionHeader() {
 }
 
 function GrowthDiagram({solution}:{solution:Solution}) {
-  const Icon=icons[solution.slug as keyof typeof icons];
-  return <div className="solution-growth-diagram" aria-label="How the solution supports business growth">
-    <div className="solution-graphic-header"><span className="solution-graphic-icon"><Icon size={23} /></span><div><small>YOUR GROWTH FRAMEWORK</small><strong>{solution.category}</strong></div></div>
-    <div className="solution-graphic-stage">
-      <div className="solution-graphic-card"><span>01 / THE CHALLENGE</span><strong>{solution.challenges[0].title}</strong></div>
-      <div className="solution-graphic-connector" aria-hidden="true"><span/></div>
-      <div className="solution-graphic-center"><Sparkles size={19}/><strong>Focused digital solution</strong></div>
-      <div className="solution-graphic-connector" aria-hidden="true"><span/></div>
-      <div className="solution-graphic-card success"><span>02 / GROWTH OPPORTUNITY</span><strong>{solution.benefits[0].title}</strong></div>
+  const Icon = icons[solution.slug as keyof typeof icons];
+  const [paused, setPaused] = useState(false);
+  const challenges = solution.challenges.slice(0, 3);
+  const benefits = solution.benefits.slice(0, 3);
+  const levels = [84, 235, 386];
+
+  return <div className={`solution-growth-diagram ${paused ? 'solution-motion-paused' : ''}`} aria-label={`How ${solution.name} addresses business challenges and supports growth`}>
+    <div className="solution-graphic-header">
+      <span className="solution-graphic-icon"><Icon size={23} aria-hidden="true" /></span>
+      <div className="solution-graphic-heading"><small>YOUR GROWTH FRAMEWORK</small><strong>{solution.category}</strong></div>
+      <button type="button" className="motion-toggle solution-motion-toggle" aria-pressed={paused} onClick={() => setPaused(v => !v)}>
+        {paused ? <Play size={14} aria-hidden="true" /> : <Pause size={14} aria-hidden="true" />}
+        {paused ? 'Play motion' : 'Pause motion'}
+      </button>
     </div>
-    <div className="solution-graphic-footer"><CircleCheck size={16}/><span>Designed around your goals, audience, and existing tools</span></div>
+    <div className="solution-flow-labels"><span>BUSINESS CHALLENGES</span><span>GROWTH OPPORTUNITIES</span></div>
+    <div className="solution-flow-stage">
+      <svg className="solution-flow-wires" viewBox="0 0 600 470" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="solution-wire-in" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#44b8f5" /><stop offset="100%" stopColor="#5c62eb" />
+          </linearGradient>
+          <linearGradient id="solution-wire-out" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#635ded" /><stop offset="100%" stopColor="#ae69ee" />
+          </linearGradient>
+        </defs>
+        {levels.map((y, i) => {
+          const incoming = `M 188 ${y} C 244 ${y}, 221 235, 267 235`;
+          const outgoing = `M 333 235 C 379 235, 356 ${y}, 412 ${y}`;
+          return <g key={i}>
+            <path d={incoming} className="solution-wire-base" />
+            <path d={incoming} className="solution-wire-flow" stroke="url(#solution-wire-in)" />
+            {!paused && <circle r="4" fill="#4cbcf5" className="solution-wire-particle"><animateMotion path={incoming} dur={`${3.8 + i * .35}s`} begin={`-${i * .65}s`} repeatCount="indefinite" /></circle>}
+            <path d={outgoing} className="solution-wire-base" />
+            <path d={outgoing} className="solution-wire-flow solution-wire-outgoing" stroke="url(#solution-wire-out)" />
+            {!paused && <circle r="4" fill="#9268f3" className="solution-wire-particle"><animateMotion path={outgoing} dur={`${4.1 + i * .35}s`} begin={`-${i * .55}s`} repeatCount="indefinite" /></circle>}
+          </g>;
+        })}
+      </svg>
+      <div className="solution-flow-rail solution-flow-left">
+        {challenges.map((challenge, i) => <div className="solution-flow-node" style={{top: `${42 + i * 151}px`}} key={challenge.title}>
+          <span className="solution-flow-node-icon challenge"><Target size={17} aria-hidden="true" /></span>
+          <span><small>CHALLENGE 0{i + 1}</small><strong>{challenge.title}</strong></span>
+        </div>)}
+      </div>
+      <div className="solution-flow-hub">
+        <span className="solution-flow-hub-ring" aria-hidden="true" />
+        <span className="solution-flow-hub-icon"><Icon size={31} aria-hidden="true" /></span>
+        <small>ONE FOCUSED SOLUTION</small><strong>Built for<br />growth.</strong>
+      </div>
+      <div className="solution-flow-rail solution-flow-right">
+        {benefits.map((benefit, i) => <div className="solution-flow-node" style={{top: `${42 + i * 151}px`}} key={benefit.title}>
+          <span className="solution-flow-node-icon opportunity"><ArrowUpRight size={17} aria-hidden="true" /></span>
+          <span><small>OPPORTUNITY 0{i + 1}</small><strong>{benefit.title}</strong></span>
+        </div>)}
+      </div>
+    </div>
+    <div className="solution-flow-mobile" aria-label="Business challenges connected to growth opportunities">
+      <div className="solution-flow-mobile-label">BUSINESS CHALLENGES</div>
+      <div className="solution-flow-mobile-grid">
+        {challenges.map(c => <span className="solution-flow-mobile-pill" key={c.title}><Target size={14} aria-hidden="true"/>{c.title}</span>)}
+      </div>
+      <div className="solution-flow-mobile-bridge" aria-hidden="true" />
+      <div className="solution-flow-mobile-hub"><Icon size={25} aria-hidden="true"/><div><small>ONE FOCUSED SOLUTION</small><strong>Built for growth.</strong></div></div>
+      <div className="solution-flow-mobile-bridge" aria-hidden="true" />
+      <div className="solution-flow-mobile-label">GROWTH OPPORTUNITIES</div>
+      <div className="solution-flow-mobile-grid">
+        {benefits.map(b => <span className="solution-flow-mobile-pill opportunity" key={b.title}><ArrowUpRight size={14} aria-hidden="true"/>{b.title}</span>)}
+      </div>
+    </div>
+    <div className="solution-graphic-footer"><CircleCheck size={16} aria-hidden="true" /><span>Connected solutions tailored to your goals and business workflows</span></div>
   </div>;
 }
 
