@@ -165,43 +165,61 @@ function FlowDiagram({ paused }: { paused: boolean }) {
 }
 
 function ContactForm() {
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [feedback, setFeedback] = useState('');
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const values = new FormData(event.currentTarget);
-    const name = String(values.get('name') || '').trim();
-    const email = String(values.get('email') || '').trim();
-    const service = String(values.get('service') || '').trim();
-    const company = String(values.get('company') || '').trim();
-    const message = String(values.get('message') || '').trim();
-    const subject = `Project consultation — ${service} — ${name}`;
-    const body = [
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Business: ${company || 'Not provided'}`,
-      `Service: ${service}`,
-      '',
-      'Project details:',
-      message,
-    ].join('\n');
-    setStatus('Your email application should open with your inquiry ready to send. Please send the email to complete your request. Nothing has been submitted automatically.');
-    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    if (status === 'submitting') return;
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    setStatus('submitting');
+    setFeedback('');
+
+    try {
+      const request = {
+        name: String(values.get('name') || '').trim(),
+        email: String(values.get('email') || '').trim(),
+        company: String(values.get('company') || '').trim(),
+        solution: String(values.get('service') || '').trim(),
+        message: String(values.get('message') || '').trim(),
+        website: String(values.get('website') || ''),
+        consent: values.get('consent') === 'on',
+        source_path: window.location.pathname + window.location.search,
+      };
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request),
+      });
+      const result = await res.json() as { ok?: boolean; error?: string; message?: string };
+      if (!res.ok || !result.ok) {
+        setStatus('error');
+        setFeedback(result.error || 'Your inquiry could not be submitted. Please try again.');
+        return;
+      }
+      setStatus('success');
+      setFeedback('Thanks! Your inquiry has been received. An acknowledgment email will be sent if delivery is available.');
+      form.reset();
+    } catch {
+      setStatus('error');
+      setFeedback('Unable to connect to the submission service. Please check your connection and try again.');
+    }
   }
 
   return (
-    <form className="lead-form" onSubmit={handleSubmit}>
+    <form className="lead-form" onSubmit={handleSubmit} aria-busy={status === 'submitting'}>
       <div className="form-head">
         <span className="form-head-icon"><Send size={19} aria-hidden="true" /></span>
-        <div><h3>Tell me about your project</h3><p>Share a few details and let's start the conversation.</p></div>
+        <div><h3>Tell me about your project</h3><p>Share a few details and I'll review your inquiry.</p></div>
       </div>
       <div className="form-grid">
-        <label>Full name *<input name="name" autoComplete="name" required maxLength={100} placeholder="Your name" /></label>
+        <label>Full name *<input name="name" autoComplete="name" required minLength={2} maxLength={100} placeholder="Your name" /></label>
         <label>Work email *<input type="email" name="email" autoComplete="email" required maxLength={160} placeholder="you@company.com" /></label>
         <label className="full">Business / website (optional)<input name="company" autoComplete="organization" maxLength={200} placeholder="Company name or website URL" /></label>
         <label className="full">What can I help with? *
           <select name="service" defaultValue={solutions.find(s => s.slug === new URLSearchParams(window.location.search).get("solution"))?.name ?? ""} required>
-            <option value="" disabled>Choose a service</option>
+            <option value="" disabled>Choose a solution</option>
             {services.map((service) => <option key={service.name} value={service.name}>{service.name}</option>)}
             <option>Multiple Services / Not Sure Yet</option>
           </select>
@@ -209,11 +227,25 @@ function ContactForm() {
         <label className="full">Project details *
           <textarea name="message" required minLength={10} maxLength={3000} rows={5} placeholder="What are you looking to build, improve, or solve?" />
         </label>
+        <div className="lead-honeypot" aria-hidden="true">
+          <label htmlFor="lead-website-field">Leave this field empty</label>
+          <input id="lead-website-field" name="website" tabIndex={-1} autoComplete="off" />
+        </div>
+        <label className="full lead-consent">
+          <input type="checkbox" name="consent" required />
+          <span>I agree to be contacted about this inquiry. My details will only be used to respond to my project request.</span>
+        </label>
       </div>
-      <button type="submit" className="button button-primary form-submit">Prepare My Inquiry <ArrowRight size={18} aria-hidden="true" /></button>
-      <p className="form-disclosure">This opens your email application with a prepared message. No information is collected or stored by this website yet.</p>
-      {status && <p className="form-status" role="status">{status}</p>}
-      <p className="form-fallback">Email directly: <a href={`mailto:${EMAIL}`}>{EMAIL}</a></p>
+      <button disabled={status === 'submitting'} type="submit" className="button button-primary form-submit">
+        {status === 'submitting' ? 'Submitting Your Inquiry…' : 'Submit Project Inquiry'}
+        <ArrowRight size={18} aria-hidden="true" />
+      </button>
+      <p className="form-disclosure">Your inquiry is submitted securely and saved for follow-up. You do not need to open your email application.</p>
+      <div className="lead-feedback" role="status" aria-live="polite">
+        {status === 'success' && <p className="lead-success"><CircleCheck size={18} aria-hidden="true" />{feedback}</p>}
+        {status === 'error' && <p className="lead-error">{feedback}</p>}
+      </div>
+      <p className="form-fallback">Questions before you submit? <a href={`mailto:${EMAIL}`}>Email me directly</a>.</p>
     </form>
   );
 }
