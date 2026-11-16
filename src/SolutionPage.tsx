@@ -17,7 +17,7 @@ const icons = {
   'technical-support': Headphones,
 };
 
-const slug = window.location.pathname.replace(/\\/+$/, '').split('/').filter(Boolean)[1] ?? '';
+const slug = window.location.pathname.split('/').filter(Boolean)[1] ?? '';
 const currentSolution = getSolution(slug);
 const contactHref = (s: Solution) => `/?solution=${encodeURIComponent(s.slug)}#contact`;
 
