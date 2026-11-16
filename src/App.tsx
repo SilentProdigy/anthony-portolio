@@ -6,7 +6,7 @@ import {
   Play, Send, ShoppingBag, Sparkles, Workflow, X, Megaphone,
   Wrench, CalendarDays, ShieldCheck, Users,
 } from 'lucide-react';
-import profilePhoto from './assets/img/profile-photo.png';
+import profilePhoto from './assets/img/anthony-portrait.webp';
 import fleetTrackr from './assets/img/fleetrackr-mobile-app.png';
 import vouxrBanner from './assets/img/vouxr-banner.png';
 import './landing.css';
