@@ -10,6 +10,8 @@ import profilePhoto from './assets/img/anthony-portrait.webp';
 import fleetTrackr from './assets/img/fleetrackr-mobile-app.png';
 import vouxrBanner from './assets/img/vouxr-banner.png';
 import './landing.css';
+import './solutions.css';
+import { solutions, solutionHref } from './solutionContent';
 
 const EMAIL = 'lopez.anthonymark16@gmail.com';
 
@@ -55,7 +57,7 @@ const faqs = [
 ];
 
 const nav = [
-  { href: '#services', title: 'Services' },
+  { href: '#solutions', title: 'Solutions' },
   { href: '#web', title: 'Web Solutions' },
   { href: '#work', title: 'Selected Work' },
   { href: '#process', title: 'Process' },
@@ -113,7 +115,7 @@ function FlowDiagram({ paused }: { paused: boolean }) {
           {services.map((service, i) => {
             const Icon = service.icon;
             return (
-              <a href="#services" className="flow-card" key={service.name} style={{ top: `${48 + i * 88}px` }}>
+              <a href={solutionHref(solutions[i].slug)} className="flow-card" key={service.name} style={{ top: `${48 + i * 88}px` }}>
                 <span className="flow-card-icon"><Icon size={19} aria-hidden="true" /></span>
                 <span><strong>{service.short}</strong><small>{service.subtitle}</small></span>
               </a>
@@ -145,7 +147,7 @@ function FlowDiagram({ paused }: { paused: boolean }) {
         <div className="mobile-service-list">
           {services.map((service) => {
             const Icon = service.icon;
-            return <span key={service.name}><Icon size={17} aria-hidden="true" />{service.short}</span>;
+            return <a key={service.name} href={solutionHref(solutions[services.indexOf(service)].slug)}><Icon size={17} aria-hidden="true" />{service.short}</a>;
           })}
         </div>
         <div className="mobile-connector" aria-hidden="true"><span /></div>
@@ -198,7 +200,7 @@ function ContactForm() {
         <label>Work email *<input type="email" name="email" autoComplete="email" required maxLength={160} placeholder="you@company.com" /></label>
         <label className="full">Business / website (optional)<input name="company" autoComplete="organization" maxLength={200} placeholder="Company name or website URL" /></label>
         <label className="full">What can I help with? *
-          <select name="service" defaultValue="" required>
+          <select name="service" defaultValue={solutions.find(s => s.slug === new URLSearchParams(window.location.search).get("solution"))?.name ?? ""} required>
             <option value="" disabled>Choose a service</option>
             {services.map((service) => <option key={service.name} value={service.name}>{service.name}</option>)}
             <option>Multiple Services / Not Sure Yet</option>
@@ -246,7 +248,15 @@ export default function App() {
             <span className="brand-copy"><strong>Anthony Mark Lopez</strong><small>Digital Solutions Specialist</small></span>
           </a>
           <nav className={`main-nav ${mobileMenuOpen ? 'open' : ''}`} id="main-navigation" aria-label="Main navigation">
-            {nav.map((item) => <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.title}</a>)}
+            {nav.map((item) => item.title === 'Solutions' ? (
+              <details className="solutions-nav-menu" key={item.href}>
+                <summary>Solutions <ChevronDown size={15} aria-hidden="true" /></summary>
+                <div className="solutions-nav-panel">
+                  <a href="#solutions" onClick={() => setMobileMenuOpen(false)}>View all solutions</a>
+                  {solutions.map(s => <a key={s.slug} href={solutionHref(s.slug)} onClick={() => setMobileMenuOpen(false)}>{s.name}</a>)}
+                </div>
+              </details>
+            ) : <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.title}</a>)}
             <a className="nav-mobile-contact" href="#contact" onClick={() => setMobileMenuOpen(false)}>Discuss Your Project <ArrowUpRight size={16} /></a>
           </nav>
           <div className="header-actions">
@@ -269,7 +279,7 @@ export default function App() {
               <p>One reliable partner for GoHighLevel, web development, graphic design, social media management, and technical support—focused on helping your business work better and grow.</p>
               <div className="hero-actions">
                 <a className="button button-primary" href="#contact">Get a Free Consultation <ArrowUpRight size={18} aria-hidden="true" /></a>
-                <a className="button button-outline" href="#services">Explore Services <ArrowRight size={18} aria-hidden="true" /></a>
+                <a className="button button-outline" href="#solutions">Explore Solutions <ArrowRight size={18} aria-hidden="true" /></a>
               </div>
               <div className="hero-assurances">
                 <span><CircleCheck size={17} />Business-focused solutions</span>
@@ -278,7 +288,7 @@ export default function App() {
               </div>
             </div>
             <div className="hero-visual">
-              <div className="flow-topline"><span>FROM SERVICES TO RESULTS</span><button type="button" aria-pressed={motionPaused} className="motion-toggle" onClick={() => setMotionPaused((value) => !value)}>{motionPaused ? <Play size={15} /> : <Pause size={15} />}{motionPaused ? 'Play motion' : 'Pause motion'}</button></div>
+              <div className="flow-topline"><span>FROM SOLUTIONS TO GROWTH</span><button type="button" aria-pressed={motionPaused} className="motion-toggle" onClick={() => setMotionPaused((value) => !value)}>{motionPaused ? <Play size={15} /> : <Pause size={15} />}{motionPaused ? 'Play motion' : 'Pause motion'}</button></div>
               <FlowDiagram paused={motionPaused} />
             </div>
           </div>
@@ -291,16 +301,16 @@ export default function App() {
           </div>
         </section>
 
-        <section className="section services-section" id="services">
+        <section className="section services-section" id="solutions">
           <div className="container">
-            <div className="section-head reveal"><div><span className="section-kicker">01 / WHAT I DO</span><h2>Specialized digital services.<br /><span>One dependable partner.</span></h2></div><p>From your online presence to the systems supporting your business, get a practical mix of technical and creative expertise.</p></div>
+            <div className="section-head reveal"><div><span className="section-kicker">01 / BUSINESS SOLUTIONS</span><h2>Solutions designed for growth.<br /><span>One dependable partner.</span></h2></div><p>From your online presence to the systems supporting your business, get a practical mix of technical and creative expertise.</p></div>
             <div className="service-grid">
               {services.map((service) => {
                 const Icon = service.icon;
                 return <article className={`service-card reveal ${service.featured ? 'featured' : ''}`} key={service.name}>
                   <div className="service-top"><span className="service-icon"><Icon size={26} aria-hidden="true" /></span>{service.featured && <span className="featured-tag">CORE SERVICE</span>}</div>
                   <h3>{service.name}</h3><p>{service.description}</p>
-                  <a href={service.name === 'Web Specialist' ? '#web' : '#contact'} className="inline-link">{service.name === 'Web Specialist' ? 'Explore web solutions' : 'Discuss this service'} <ArrowUpRight size={17} aria-hidden="true" /></a>
+                  <a href={solutionHref(solutions[services.indexOf(service)].slug)} className="inline-link">Explore Solution <ArrowUpRight size={17} aria-hidden="true" /></a>
                 </article>;
               })}
             </div>
@@ -313,7 +323,7 @@ export default function App() {
               <span className="section-kicker light">02 / WEB SPECIALIST</span>
               <h2>Your website should do more than <em>look good.</em></h2>
               <p>Whether you need an online storefront, a high-converting landing page, or a custom system built around your team, I handle the strategy, development, and technical details.</p>
-              <a href="#contact" className="button button-white">Let's Talk Web Solutions <ArrowUpRight size={18} aria-hidden="true" /></a>
+              <a href="/solutions/web-development" className="button button-white">Explore Web Solutions <ArrowUpRight size={18} aria-hidden="true" /></a>
             </div>
             <div className="web-services-grid">
               {webServices.map((service) => {
@@ -357,7 +367,7 @@ export default function App() {
 
         <section className="section faq-section" id="faq">
           <div className="container faq-grid">
-            <div className="reveal"><span className="section-kicker">05 / COMMON QUESTIONS</span><h2>Answers before we get started.</h2><p>Everything you need to know about services, how we can work together, and what happens next.</p><a href="#contact" className="inline-link">Still have questions? Let's talk <ArrowUpRight size={17} aria-hidden="true" /></a></div>
+            <div className="reveal"><span className="section-kicker">05 / COMMON QUESTIONS</span><h2>Answers before we get started.</h2><p>Everything you need to know about solutions, how we can work together, and what happens next.</p><a href="#contact" className="inline-link">Still have questions? Let's talk <ArrowUpRight size={17} aria-hidden="true" /></a></div>
             <div className="faq-items reveal">{faqs.map((faq, i) => <details key={faq.question} open={i === 0}><summary>{faq.question}<ChevronDown size={18} aria-hidden="true" /></summary><p>{faq.answer}</p></details>)}</div>
           </div>
         </section>
@@ -368,7 +378,7 @@ export default function App() {
               <span className="section-kicker light">06 / LET'S WORK TOGETHER</span>
               <h2>Have something in mind?<br /><span>Let's make it happen.</span></h2>
               <p>Tell me what you're trying to build, improve, or automate. We'll discuss the most practical next step for your business.</p>
-              <div className="contact-steps"><span><Check size={17} /> Share your goals</span><span><Check size={17} /> Identify the right services</span><span><Check size={17} /> Define the next steps</span></div>
+              <div className="contact-steps"><span><Check size={17} /> Share your goals</span><span><Check size={17} /> Identify the right solutions</span><span><Check size={17} /> Define the next steps</span></div>
               <div className="contact-email"><Mail size={19} /><a href={`mailto:${EMAIL}`}>{EMAIL}</a></div>
             </div>
             <ContactForm />
