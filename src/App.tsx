@@ -49,7 +49,7 @@ const projects = [
 ];
 
 const faqs = [
-  { question: 'Can I hire you for a single service?', answer: 'Yes. You can request one specific service or combine services depending on your goals. We can define a clear scope before starting.' },
+  { question: 'Can I hire you for a single solution?', answer: 'Yes. You can request one solution or combine capabilities depending on your goals. We can define a clear scope before starting.' },
   { question: 'Do you work with existing websites or GHL accounts?', answer: 'Yes. I can review your existing setup to identify improvements, troubleshoot issues, and plan development or maintenance work. Access and scope are agreed upon first.' },
   { question: 'Can you handle design and development together?', answer: 'Yes. I work across visual design and implementation, so projects can include both the user experience and the technical build.' },
   { question: 'What do projects typically cost?', answer: 'Pricing depends on complexity, deliverables, integrations, and the level of ongoing support. Share your requirements and I can propose a suitable scope.' },
@@ -143,7 +143,7 @@ function FlowDiagram({ paused }: { paused: boolean }) {
         </div>
       </div>
       <div className="flow-mobile">
-        <div className="flow-mobile-label">FIVE CONNECTED SERVICES</div>
+        <div className="flow-mobile-label">FIVE CONNECTED SOLUTIONS</div>
         <div className="mobile-service-list">
           {services.map((service) => {
             const Icon = service.icon;
@@ -276,7 +276,7 @@ export default function App() {
             <div className="hero-copy">
               <span className="eyebrow"><Sparkles size={15} aria-hidden="true" /> YOUR DIGITAL GROWTH PARTNER</span>
               <h1>Build better websites. <span>Automate smarter.</span> Grow with confidence.</h1>
-              <p>One reliable partner for GoHighLevel, web development, graphic design, social media management, and technical support—focused on helping your business work better and grow.</p>
+              <p>One reliable partner for GoHighLevel, web development, graphic design, social media management, and technical support—solutions focused on helping your business work better and grow.</p>
               <div className="hero-actions">
                 <a className="button button-primary" href="#contact">Get a Free Consultation <ArrowUpRight size={18} aria-hidden="true" /></a>
                 <a className="button button-outline" href="#solutions">Explore Solutions <ArrowRight size={18} aria-hidden="true" /></a>
@@ -303,7 +303,7 @@ export default function App() {
 
         <section className="section services-section" id="solutions">
           <div className="container">
-            <div className="section-head reveal"><div><span className="section-kicker">01 / BUSINESS SOLUTIONS</span><h2>Solutions designed for growth.<br /><span>One dependable partner.</span></h2></div><p>From your online presence to the systems supporting your business, get a practical mix of technical and creative expertise.</p></div>
+            <div className="section-head reveal"><div><span className="section-kicker">01 / BUSINESS SOLUTIONS</span><h2>Solutions designed for growth.<br /><span>One dependable partner.</span></h2></div><p>Explore practical solutions to attract customers, improve operations, and grow with confidence.</p></div>
             <div className="service-grid">
               {services.map((service) => {
                 const Icon = service.icon;
