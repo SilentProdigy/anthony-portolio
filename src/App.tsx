@@ -121,11 +121,11 @@ function FlowDiagram({ paused }: { paused: boolean }) {
           })}
         </div>
         <div className="flow-hub">
-          <span className="hub-ring" />
-          <img src={profilePhoto} alt="Anthony Mark Lopez" />
-          <div className="hub-shade">
+          <span className="hub-ring" aria-hidden="true" />
+          <div className="hub-center">
+            <span className="hub-symbol" aria-hidden="true"><Sparkles size={26} /></span>
             <small>ONE DIGITAL PARTNER</small>
-            <strong>Built around your growth.</strong>
+            <strong>One partner.<br />Multiple solutions.</strong>
           </div>
         </div>
         <div className="flow-rail flow-right">
@@ -150,8 +150,8 @@ function FlowDiagram({ paused }: { paused: boolean }) {
         </div>
         <div className="mobile-connector" aria-hidden="true"><span /></div>
         <div className="mobile-hub">
-          <img src={profilePhoto} alt="Anthony Mark Lopez" />
-          <div><small>YOUR DIGITAL PARTNER</small><strong>One partner. Multiple solutions.</strong></div>
+          <span className="mobile-hub-symbol" aria-hidden="true"><Sparkles size={26} /></span>
+          <div><small>ONE DIGITAL PARTNER</small><strong>One partner. Multiple solutions.</strong></div>
         </div>
         <div className="mobile-connector" aria-hidden="true"><span /></div>
         <div className="mobile-outcomes">
