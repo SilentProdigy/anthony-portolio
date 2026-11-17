@@ -1,546 +1,425 @@
-import { useMemo, useState } from "react";
-import profilePhoto from "./assets/img/profile-photo.png";
-import fleeTrackr from "./assets/img/fleetrackr-mobile-app.png";
-import vouxr from "./assets/img/vouxr-banner.png";
+import { useEffect, useState, type FormEvent } from 'react';
 import {
-  ArrowUpRight,
-  Code2,
-  Palette,
-  Layout,
-  Smartphone,
-  Mail,
-  Menu,
-  X,
-  Sparkles,
-  PenTool,
-  Moon,
-  Sun,
-  Search,
-  ExternalLink,
-  CheckCircle2,
-  Zap,
-} from "lucide-react";
+  ArrowRight, ArrowUpRight, Check, ChevronDown, CircleCheck, Code2,
+  ExternalLink, Gauge, Globe2, Headphones, LayoutDashboard, Link2,
+  Mail, Menu, MonitorSmartphone, MousePointerClick, Palette, Pause,
+  Play, Send, ShoppingBag, Sparkles, Workflow, X, Megaphone,
+  Wrench, CalendarDays, ShieldCheck, Users,
+} from 'lucide-react';
+import profilePhoto from './assets/img/anthony-portrait.webp';
+import fleetTrackr from './assets/img/fleetrackr-mobile-app.png';
+import vouxrBanner from './assets/img/vouxr-banner.png';
+import './landing.css';
+import './solutions.css';
+import { solutions, solutionHref } from './solutionContent';
+
+const EMAIL = 'lopez.anthonymark16@gmail.com';
 
 const services = [
-  {
-    icon: <Code2 size={22} />,
-    title: "Web Development",
-    desc: "Custom responsive websites, business systems, landing pages, and scalable front-end interfaces built with clean modern code.",
-  },
-  {
-    icon: <Layout size={22} />,
-    title: "WordPress & WooCommerce",
-    desc: "Professional WordPress websites, Elementor builds, WooCommerce stores, plugin customization, and performance optimization.",
-  },
-  {
-    icon: <Smartphone size={22} />,
-    title: "PWA & Business Apps",
-    desc: "Mobile-first progressive web applications for POS, ordering systems, loyalty platforms, business hubs, and sales trackers.",
-  },
-  {
-    icon: <Palette size={22} />,
-    title: "Web & Graphic Design",
-    desc: "Minimal, brand-focused layouts, social media creatives, posters, digital ads, UI concepts, and visual identity support.",
-  },
+  { name: 'GHL Specialist', short: 'GoHighLevel', icon: Workflow, subtitle: 'CRM & automation', description: 'CRM setup, pipelines, lead nurturing, workflow automation, funnels, forms, appointment systems, campaigns, and integrations.', featured: true },
+  { name: 'Web Specialist', short: 'Web Specialist', icon: MonitorSmartphone, subtitle: 'Websites & web apps', description: 'Modern websites, WordPress, Shopify, high-converting landing pages, custom business applications, maintenance, and optimization.', featured: true },
+  { name: 'Graphic Design', short: 'Graphic Design', icon: Palette, subtitle: 'Brand & creatives', description: 'Professional marketing graphics, social media creatives, advertising assets, promotional materials, and consistent brand visuals.' },
+  { name: 'Social Media Management', short: 'Social Media', icon: Megaphone, subtitle: 'Content & growth', description: 'Content planning, branded posts, scheduling, campaign coordination, community engagement support, and performance reporting.' },
+  { name: 'Technical Support', short: 'Tech Support', icon: Headphones, subtitle: 'Help & maintenance', description: 'Technical troubleshooting, website repairs, hosting and DNS support, platform configuration, integrations, and ongoing assistance.' },
 ];
 
-const skills = [
-  "React JS",
-  "TypeScript",
-  "Next.js",
-  "Firebase",
-  "Supabase",
-  "WordPress",
-  "WooCommerce",
-  "Elementor",
-  "HTML/CSS/JS",
-  "Tailwind CSS",
-  "PHP",
-  "SEO",
-  "Canva",
-  "Photoshop",
-  "Illustrator",
-  "UI/UX Design",
+const outcomes = [
+  { title: 'More qualified leads', subtitle: 'Capture and nurture opportunities', icon: Users },
+  { title: 'Smarter operations', subtitle: 'Reduce repetitive manual work', icon: Workflow },
+  { title: 'Better digital experience', subtitle: 'Make your website work harder', icon: Globe2 },
+  { title: 'Stronger brand presence', subtitle: 'Stand out with consistent visuals', icon: Palette },
+  { title: 'Reliable ongoing support', subtitle: 'Keep everything running smoothly', icon: ShieldCheck },
+];
+
+const webServices = [
+  { icon: Code2, name: 'Custom Web Development', text: 'Responsive websites and modern front-end experiences using React, Next.js, and clean code.' },
+  { icon: Globe2, name: 'WordPress & WooCommerce', text: 'Custom WordPress sites, Elementor builds, plugin features, and online stores.' },
+  { icon: ShoppingBag, name: 'Shopify Development', text: 'Theme and Liquid customization, product experiences, storefront improvements, and CRO.' },
+  { icon: LayoutDashboard, name: 'Custom Web Apps & PWAs', text: 'Business dashboards, point-of-sale systems, loyalty apps, and workflow tools.' },
+  { icon: MousePointerClick, name: 'Landing Pages & Funnels', text: 'Lead-generation pages, clear user journeys, conversion-focused layouts, and forms.' },
+  { icon: Link2, name: 'Integrations & Automation', text: 'Connect services, workflows, APIs, webhooks, and back-office systems.' },
+  { icon: Gauge, name: 'Performance & SEO', text: 'Speed improvements, technical SEO foundations, accessibility, and UX refinements.' },
+  { icon: Wrench, name: 'Maintenance & Troubleshooting', text: 'Bug fixes, updates, platform migrations, domain setup, and technical upkeep.' },
 ];
 
 const projects = [
-  {
-    category: "PWA / SaaS",
-    title: "Loyalty Rewards Platform",
-    desc: "A mobile-first rewards system with QR scanning, customer enrollment, merchant dashboards, stamp cards, and reward coins.",
-    image: "https://images.unsplash.com/photo-1551650975-87deedd944c3?auto=format&fit=crop&w=1200&q=80",
-    tags: ["React", "Firebase", "PWA"],
-    url: "http://loyalapp.vercel.app/",
-  },
-  {
-    category: "E-commerce",
-    title: "Shopify Storefront Customization",
-    desc: "Customized Shopify storefront with optimized product pages, conversion-focused layouts, performance enhancements, and seamless user experience tailored for higher sales and engagement.",
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&w=1200&q=80",
-    tags: ["Shopify", "Liquid", "UI/UX", "Conversion Optimization"],
-    url: "https://pushtrees.com/",
-  },
-  {
-    category: "WordPress",
-    title: "WooCommerce Product Gallery Plugin",
-    desc: "A custom shortcode-based WooCommerce gallery with AJAX filters, search sidebar, admin settings, and responsive layout.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-    tags: ["PHP", "AJAX", "WooCommerce"],
-    url: "https://megavar.com.au/equipment-rentals/",
-  },
-  {
-    category: "WordPress",
-    title: "Wordpress Design & Development",
-    desc: "A custom shortcode-based WooCommerce gallery with AJAX filters, search sidebar, admin settings, and responsive layout.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-    tags: ["PHP", "AJAX", "WooCommerce"],
-    url: "https://drive.google.com/drive/folders/17jHrtm6O4bCeqKLqvRwFaeW7WuKiPdHY?usp=drive_link",
-  },
-  {
-    category: "Graphic Design",
-    title: "Sports & Brand Creatives",
-    desc: "High-impact posters, campaign graphics, social media layouts, apparel concepts, and branded visual content.",
-    image: "https://images.unsplash.com/photo-1519750157634-b6d493a0f77c?auto=format&fit=crop&w=1200&q=80",
-    tags: ["Photoshop", "Canva", "Branding"],
-    url: "https://drive.google.com/drive/folders/1vXR_38pHP1ZaSb1G1vERa19YHEWbN_xX?usp=drive_link",
-  },
-  {
-    category: "Custom Web System",
-    title: "Multi-Business POS & Sales Tracker",
-    desc: "A scalable POS and sales tracking system supporting multiple businesses per user, real-time analytics, product management, and transaction history with mobile-first design.",
-    image: "https://images.unsplash.com/photo-1556745757-8d76bdb6984b?auto=format&fit=crop&w=1200&q=80",
-    tags: ["React", "Firebase", "POS"],
-    url: "https://eagles-wings-pos.vercel.app/",
-  },
-  {
-    category: "Car Rental Tracker PWA - Mobile First",
-    title: "FleeTracker - Smart Car Rental Management",
-    desc: "A mobile-first PWA for car rental businesses featuring real-time fleet tracking, booking management, customer profiles, and performance analytics, all optimized for seamless use on smartphones and tablets.",
-    image: fleeTrackr,
-    tags: ["React", "Supabase", "Mobile-First", "PWA"],
-    url: "https://fleetrackr.vercel.app/",
-  },
-  {
-    category: "Vouxr - Mr. Hebrews Cafe Rewards PWA",
-    title: "Vouxr - Mr. Hebrews Cafe Rewards",
-    desc: "A mobile-first PWA for managing cafe rewards and loyalty programs, featuring seamless integration with existing systems and a user-friendly interface.",
-    image: vouxr,
-    tags: ["React", "Supabase", "Mobile-First", "PWA"],
-    url: "https://vouxr-ai.vercel.app/",
+  { label: 'CUSTOMER LOYALTY · WEB APP', title: 'Vouxr Rewards', description: 'Mobile-first loyalty experiences with membership accounts, points, stamp cards, and business workflows.', href: 'https://vouxr-ai.vercel.app/', image: vouxrBanner, alt: 'Vouxr rewards application preview' },
+  { label: 'FLEET MANAGEMENT · PWA', title: 'FleeTracker', description: 'Rental-management application for managing vehicles, bookings, customers, and business records.', href: 'https://fleetrackr.vercel.app/', image: fleetTrackr, alt: 'FleeTracker mobile application preview' },
+  { label: 'OPERATIONS · BUSINESS SYSTEM', title: 'Eagles-Wings POS', description: 'Multi-store point-of-sale system for sales, inventory, staff workflows, and operational reporting.', href: 'https://eagles-wings-pos.vercel.app/', image: null, alt: '' },
+];
+
+const faqs = [
+  { question: 'Can I hire you for a single solution?', answer: 'Yes. You can request one solution or combine capabilities depending on your goals. We can define a clear scope before starting.' },
+  { question: 'Do you work with existing websites or GHL accounts?', answer: 'Yes. I can review your existing setup to identify improvements, troubleshoot issues, and plan development or maintenance work. Access and scope are agreed upon first.' },
+  { question: 'Can you handle design and development together?', answer: 'Yes. I work across visual design and implementation, so projects can include both the user experience and the technical build.' },
+  { question: 'What do projects typically cost?', answer: 'Pricing depends on complexity, deliverables, integrations, and the level of ongoing support. Share your requirements and I can propose a suitable scope.' },
+  { question: 'Can we work together remotely?', answer: 'Yes. I support remote collaboration with clear milestones, progress updates, and handover documentation where appropriate.' },
+];
+
+const nav = [
+  { href: '#solutions', title: 'Solutions' },
+  { href: '#web', title: 'Web Solutions' },
+  { href: '#work', title: 'Selected Work' },
+  { href: '#process', title: 'Process' },
+  { href: '#faq', title: 'FAQs' },
+];
+
+const pathIn = (y: number) => `M 180 ${y} C 262 ${y}, 257 252, 307 252`;
+const pathOut = (y: number) => `M 493 252 C 544 252, 538 ${y}, 620 ${y}`;
+
+function FlowDiagram({ paused }: { paused: boolean }) {
+  return (
+    <div className="flow-wrap">
+      <div className="flow-label-row">
+        <span>MY SPECIALTIES</span>
+        <span>YOUR BUSINESS OUTCOMES</span>
+      </div>
+      <div className="flow-stage" aria-label="Five digital services connect through one partner to create stronger business outcomes">
+        <svg className="flow-wires" viewBox="0 0 800 520" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <linearGradient id="wire-in" x1="0%" x2="100%">
+              <stop offset="0%" stopColor="#36b7f6" />
+              <stop offset="100%" stopColor="#5b56e8" />
+            </linearGradient>
+            <linearGradient id="wire-out" x1="0%" x2="100%">
+              <stop offset="0%" stopColor="#5b56e8" />
+              <stop offset="100%" stopColor="#a361ef" />
+            </linearGradient>
+          </defs>
+          {services.map((service, i) => {
+            const d = pathIn(80 + i * 88);
+            return (
+              <g key={service.name}>
+                <path d={d} className="wire-base" />
+                <path d={d} className="wire-dash incoming" />
+                {!paused && <circle className="flow-particle" r="4.2" fill="#46c6ff">
+                  <animateMotion path={d} dur={`${4.1 + i * .35}s`} begin={`${i * -.4}s`} repeatCount="indefinite" />
+                </circle>}
+              </g>
+            );
+          })}
+          {outcomes.map((outcome, i) => {
+            const d = pathOut(80 + i * 88);
+            return (
+              <g key={outcome.title}>
+                <path d={d} className="wire-base" />
+                <path d={d} className="wire-dash outgoing" />
+                {!paused && <circle className="flow-particle" r="4.2" fill="#9d66ff">
+                  <animateMotion path={d} dur={`${4.3 + i * .35}s`} begin={`${i * -.38}s`} repeatCount="indefinite" />
+                </circle>}
+              </g>
+            );
+          })}
+        </svg>
+        <div className="flow-rail flow-left">
+          {services.map((service, i) => {
+            const Icon = service.icon;
+            return (
+              <a href={solutionHref(solutions[i].slug)} className="flow-card" key={service.name} style={{ top: `${48 + i * 88}px` }}>
+                <span className="flow-card-icon"><Icon size={19} aria-hidden="true" /></span>
+                <span><strong>{service.short}</strong><small>{service.subtitle}</small></span>
+              </a>
+            );
+          })}
+        </div>
+        <div className="flow-hub">
+          <span className="hub-ring" aria-hidden="true" />
+          <div className="hub-center">
+            <span className="hub-symbol" aria-hidden="true"><Sparkles size={26} /></span>
+            <small>ONE DIGITAL PARTNER</small>
+            <strong>One partner.<br />Multiple solutions.</strong>
+          </div>
+        </div>
+        <div className="flow-rail flow-right">
+          {outcomes.map((outcome, i) => {
+            const Icon = outcome.icon;
+            return (
+              <div className="flow-card" key={outcome.title} style={{ top: `${48 + i * 88}px` }}>
+                <span className="flow-card-icon result"><Icon size={19} aria-hidden="true" /></span>
+                <span><strong>{outcome.title}</strong><small>{outcome.subtitle}</small></span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div className="flow-mobile">
+        <div className="flow-mobile-label">FIVE CONNECTED SOLUTIONS</div>
+        <div className="mobile-service-list">
+          {services.map((service) => {
+            const Icon = service.icon;
+            return <a key={service.name} href={solutionHref(solutions[services.indexOf(service)].slug)}><Icon size={17} aria-hidden="true" />{service.short}</a>;
+          })}
+        </div>
+        <div className="mobile-connector" aria-hidden="true"><span /></div>
+        <div className="mobile-hub">
+          <span className="mobile-hub-symbol" aria-hidden="true"><Sparkles size={26} /></span>
+          <div><small>ONE DIGITAL PARTNER</small><strong>One partner. Multiple solutions.</strong></div>
+        </div>
+        <div className="mobile-connector" aria-hidden="true"><span /></div>
+        <div className="mobile-outcomes">
+          {outcomes.map((outcome) => <span key={outcome.title}><Check size={14} aria-hidden="true" />{outcome.title}</span>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContactForm() {
+  const [status, setStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [feedback, setFeedback] = useState('');
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (status === 'submitting') return;
+    const form = event.currentTarget;
+    const values = new FormData(form);
+    setStatus('submitting');
+    setFeedback('');
+
+    try {
+      const request = {
+        name: String(values.get('name') || '').trim(),
+        email: String(values.get('email') || '').trim(),
+        company: String(values.get('company') || '').trim(),
+        solution: String(values.get('service') || '').trim(),
+        message: String(values.get('message') || '').trim(),
+        website: String(values.get('website') || ''),
+        consent: values.get('consent') === 'on',
+        source_path: window.location.pathname + window.location.search,
+      };
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request),
+      });
+      const result = await res.json() as { ok?: boolean; error?: string; message?: string };
+      if (!res.ok || !result.ok) {
+        setStatus('error');
+        setFeedback(result.error || 'Your inquiry could not be submitted. Please try again.');
+        return;
+      }
+      setStatus('success');
+      setFeedback(result.message || 'Thanks! Your inquiry has been saved. I will review it and follow up by email.');
+      form.reset();
+    } catch {
+      setStatus('error');
+      setFeedback('Unable to connect to the submission service. Please check your connection and try again.');
+    }
   }
-];
-
-const process = [
-  "Discover goals, audience, and business requirements",
-  "Design clean user journeys and conversion-focused layouts",
-  "Develop responsive, scalable, and maintainable code",
-  "Optimize speed, SEO, accessibility, and usability",
-  "Launch, test, improve, and support growth",
-];
-
-export default function PortfolioWebsite() {
-  const [open, setOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [search, setSearch] = useState("");
-
-  const navItems = ["Services", "Skills", "Projects", "Process", "Contact"];
-  const categories = ["All", ...Array.from(new Set(projects.map((project) => project.category)))];
-
-  const filteredProjects = useMemo(() => {
-    return projects.filter((project) => {
-      const matchesCategory = activeCategory === "All" || project.category === activeCategory;
-      const keyword = search.toLowerCase();
-      const matchesSearch =
-        project.title.toLowerCase().includes(keyword) ||
-        project.desc.toLowerCase().includes(keyword) ||
-        project.tags.join(" ").toLowerCase().includes(keyword);
-
-      return matchesCategory && matchesSearch;
-    });
-  }, [activeCategory, search]);
 
   return (
-    <main className={`portfolio-shell ${darkMode ? "dark" : "light"}`}>
-      <style>{`
-        * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
-        body { margin: 0; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-        a { color: inherit; text-decoration: none; }
-        button, input { font: inherit; }
-        .portfolio-shell {
-          --bg: #f7f4ef;
-          --text: #171717;
-          --muted: #626262;
-          --soft: rgba(255,255,255,.62);
-          --line: rgba(0,0,0,.11);
-          --panel: #171717;
-          --panelText: #ffffff;
-          min-height: 100vh;
-          background: radial-gradient(circle at top left, rgba(20,20,20,.08), transparent 32%), var(--bg);
-          color: var(--text);
-          transition: background .35s ease, color .35s ease;
-        }
-        .portfolio-shell.dark {
-          --bg: #101010;
-          --text: #f4f1ea;
-          --muted: #b5b0a6;
-          --soft: rgba(255,255,255,.06);
-          --line: rgba(255,255,255,.12);
-          --panel: #f4f1ea;
-          --panelText: #141414;
-          background: radial-gradient(circle at top right, rgba(255,255,255,.13), transparent 32%), var(--bg);
-        }
-        .container { width: 100%; max-width: 100%; padding: 0 20vh; margin: 0 auto;}
-        .nav { position: sticky; top: 0; z-index: 30; backdrop-filter: blur(18px); background: color-mix(in srgb, var(--bg) 82%, transparent); border-bottom: 1px solid var(--line); }
-        .nav-inner { height: 76px; display: flex; align-items: center; justify-content: space-between; }
-        .brand { display: flex; align-items: center; gap: 12px; font-weight: 750; letter-spacing: -.04em; }
-        .brand-mark {
-          width: 42px;
-          height: 42px;
-          border-radius: 50%;
-          overflow: hidden;
-          border: 3px solid var(--text);
-        }
+    <form className="lead-form" onSubmit={handleSubmit} aria-busy={status === 'submitting'}>
+      <div className="form-head">
+        <span className="form-head-icon"><Send size={19} aria-hidden="true" /></span>
+        <div><h3>Tell me about your project</h3><p>Share a few details and I'll review your inquiry.</p></div>
+      </div>
+      <div className="form-grid">
+        <label>Full name *<input name="name" autoComplete="name" required minLength={2} maxLength={100} placeholder="Your name" /></label>
+        <label>Work email *<input type="email" name="email" autoComplete="email" required maxLength={160} placeholder="you@company.com" /></label>
+        <label className="full">Business / website (optional)<input name="company" autoComplete="organization" maxLength={200} placeholder="Company name or website URL" /></label>
+        <label className="full">What can I help with? *
+          <select name="service" defaultValue={solutions.find(s => s.slug === new URLSearchParams(window.location.search).get("solution"))?.name ?? ""} required>
+            <option value="" disabled>Choose a solution</option>
+            {services.map((service) => <option key={service.name} value={service.name}>{service.name}</option>)}
+            <option>Multiple Services / Not Sure Yet</option>
+          </select>
+        </label>
+        <label className="full">Project details *
+          <textarea name="message" required minLength={10} maxLength={3000} rows={5} placeholder="What are you looking to build, improve, or solve?" />
+        </label>
+        <div className="lead-honeypot" aria-hidden="true">
+          <label htmlFor="lead-website-field">Leave this field empty</label>
+          <input id="lead-website-field" name="website" tabIndex={-1} autoComplete="off" />
+        </div>
+        <label className="full lead-consent">
+          <input type="checkbox" name="consent" required />
+          <span>I agree to be contacted about this inquiry. My details will only be used to respond to my project request.</span>
+        </label>
+      </div>
+      <button disabled={status === 'submitting'} type="submit" className="button button-primary form-submit">
+        {status === 'submitting' ? 'Submitting Your Inquiry…' : 'Submit Project Inquiry'}
+        <ArrowRight size={18} aria-hidden="true" />
+      </button>
+      <p className="form-disclosure">Your inquiry is submitted securely and saved for follow-up. You do not need to open your email application.</p>
+      <div className="lead-feedback" role="status" aria-live="polite">
+        {status === 'success' && <p className="lead-success"><CircleCheck size={18} aria-hidden="true" />{feedback}</p>}
+        {status === 'error' && <p className="lead-error">{feedback}</p>}
+      </div>
+      <p className="form-fallback">Questions before you submit? <a href={`mailto:${EMAIL}`}>Email me directly</a>.</p>
+    </form>
+  );
+}
 
-        .brand-mark img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transform: scale(1.1);
-        }
-        
-        .nav-links { display: flex; align-items: center; gap: 28px; font-size: 14px; color: var(--muted); }
-        .nav-links a:hover { color: var(--text); }
-        .nav-actions { display: flex; align-items: center; gap: 10px; }
-        .icon-btn { width: 43px; height: 43px; border-radius: 999px; border: 1px solid var(--line); background: var(--soft); color: var(--text); display: inline-grid; place-items: center; cursor: pointer; transition: .2s ease; }
-        .icon-btn:hover { transform: translateY(-2px); }
-        .nav-cta { background: var(--text); color: var(--bg); padding: 11px 17px; border-radius: 999px; display: inline-flex; gap: 7px; align-items: center; }
-        .menu-btn { display: none; border: 0; background: transparent; color: var(--text); }
-        .mobile-menu { display: none; }
-        .hero { padding: 86px 0 70px; }
-        .hero-grid { display: grid; grid-template-columns: 1.2fr .8fr; gap: 52px; align-items: center; }
-        .eyebrow { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); border-radius: 999px; padding: 9px 13px; font-size: 13px; color: var(--muted); background: var(--soft); }
-        .hero h1 {
-          font-size: clamp(48px, 8vw, 104px);
-          line-height: .92;
-          letter-spacing: -.08em;
-          margin: 24px 0;
-          max-width: 900px;
-          color: var(--text); /* FIX: force visible heading */
-        }
-        .hero h1 span {
-          color: transparent;
-          -webkit-text-stroke: 1.2px var(--text);
-          opacity: 0.25; /* FIX: reduce ghost text visibility */
-        }
-        .hero p { font-size: clamp(17px, 2vw, 21px); line-height: 1.7; color: var(--muted); max-width: 670px; }
-        .hero-actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
-        .btn { border-radius: 999px; padding: 14px 19px; display: inline-flex; align-items: center; gap: 8px; font-weight: 650; border: 1px solid var(--text); transition: .2s ease; cursor: pointer; }
-        .btn-dark { background: var(--text); color: var(--bg); }
-        .btn-light { background: transparent; }
-        .btn:hover { transform: translateY(-2px); }
-        .hero-card { border: 1px solid var(--line); border-radius: 34px; background: var(--soft); padding: 20px; box-shadow: 0 30px 80px rgba(0,0,0,.08); }
-        .profile-panel { border-radius: 26px; min-height: 460px; background: var(--panel); color: var(--panelText); padding: 28px; display: flex; flex-direction: column; position: relative; overflow: hidden; }
-        .profile-panel::before { content: ""; position: absolute; width: 340px; height: 340px; border: 1px solid color-mix(in srgb, var(--panelText) 18%, transparent); border-radius: 50%; right: -130px; top: -70px; }
-        .profile-panel::after { content: ""; position: absolute; width: 190px; height: 190px; background: color-mix(in srgb, var(--panelText) 8%, transparent); border-radius: 50%; left: -60px; bottom: 30px; }
-        .panel-top { position: relative; z-index: 2; display: flex; justify-content: space-between; align-items: flex-start; }
-        .availability { font-size: 13px; border: 1px solid color-mix(in srgb, var(--panelText) 18%, transparent); padding: 8px 12px; border-radius: 999px; }
-        .panel-title { position: relative; z-index: 2; }
-        .panel-title h2 { font-size: 52px; line-height: .95; letter-spacing: -.06em; margin: 0 0 14px; color: var(--panelText); }
-        .panel-title p { color: color-mix(in srgb, var(--panelText) 72%, transparent); line-height: 1.7; margin: 0; }
-        .floating-stack { position: absolute; inset: auto 24px 34px auto; z-index: 3; display: grid; gap: 10px; }
-        .floating-pill { display: flex; align-items: center; gap: 8px; background: color-mix(in srgb, var(--panelText) 10%, transparent); border: 1px solid color-mix(in srgb, var(--panelText) 16%, transparent); backdrop-filter: blur(12px); padding: 10px 12px; border-radius: 999px; font-size: 13px; animation: float 4s ease-in-out infinite; }
-        .floating-pill:nth-child(2) { animation-delay: .7s; }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; margin-top: 34px; }
-        .stat { border-top: 1px solid var(--line); padding-top: 18px; }
-        .stat strong { font-size: 34px; letter-spacing: -.05em; display: block; }
-        .stat span { color: var(--muted); font-size: 14px; }
-        section { padding: 84px 0; }
-        .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 30px; margin-bottom: 34px; }
-        .section-head h2 {
-          font-size: clamp(34px, 5vw, 64px);
-          letter-spacing: -.07em;
-          margin: 0;
-          line-height: .98;
-          max-width: 690px;
-          color: var(--text); /* FIX: ensure strong contrast */
-        }
-        .section-head p { color: var(--muted); line-height: 1.7; max-width: 430px; margin: 0; }
-        .service-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
-        .service-card, .project-card, .process-card { background: var(--soft); border: 1px solid var(--line); border-radius: 28px; transition: .2s ease; }
-        .service-card { padding: 24px; }
-        .service-card:hover, .project-card:hover { transform: translateY(-5px); box-shadow: 0 25px 60px rgba(0,0,0,.08); }
-        .service-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 16px; background: var(--text); color: var(--bg); margin-bottom: 34px; }
-        .service-card h3, .project-card h3 { letter-spacing: -.04em; font-size: 22px; margin: 0 0 12px; }
-        .service-card p, .project-card p { color: var(--muted); line-height: 1.65; margin: 0; }
-        .skills-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
-        .skill-pill { padding: 12px 16px; border: 1px solid var(--line); border-radius: 999px; background: var(--soft); color: var(--text); transition: .2s ease; }
-        .skill-pill:hover { transform: translateY(-3px); background: var(--text); color: var(--bg); }
-        .project-tools { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; margin-bottom: 22px; }
-        .category-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
-        .tab { border: 1px solid var(--line); background: var(--soft); color: var(--text); padding: 10px 13px; border-radius: 999px; cursor: pointer; transition: .2s ease; }
-        .tab.active, .tab:hover { background: var(--text); color: var(--bg); }
-        .search-box { min-width: min(100%, 300px); display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--soft); border-radius: 999px; padding: 0 14px; }
-        .search-box input { width: 100%; border: 0; outline: 0; background: transparent; color: var(--text); padding: 12px 0; }
-        .project-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 18px; }
-        .project-card { overflow: hidden; display: flex; flex-direction: column; }
-        .project-image { height: 245px; position: relative; overflow: hidden; }
-        .project-image img { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.85); transition: .45s ease; }
-        .project-card:hover .project-image img { transform: scale(1.08); filter: saturate(1); }
-        .project-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.55), transparent 65%); display: flex; justify-content: space-between; align-items: flex-end; padding: 18px; color: #fff; }
-        .category { font-size: 13px; border: 1px solid rgba(255,255,255,.35); background: rgba(255,255,255,.14); backdrop-filter: blur(12px); border-radius: 999px; padding: 8px 12px; }
-        .project-body { padding: 24px; display: flex; flex-direction: column; flex: 1; justify-content: space-between; }
-        .project-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
-        .project-tags span { font-size: 12px; background: var(--text); color: var(--bg); padding: 7px 10px; border-radius: 999px; }
-        .empty-state { border: 1px dashed var(--line); border-radius: 28px; padding: 30px; color: var(--muted); }
-        .process-list { counter-reset: steps; display: grid; gap: 12px; }
-        .process-card { display: grid; grid-template-columns: 90px 1fr auto; align-items: center; padding: 24px; }
-        .process-card::before { counter-increment: steps; content: "0" counter(steps); font-size: 28px; letter-spacing: -.05em; color: var(--muted); }
-        .process-card p { margin: 0; font-size: 20px; letter-spacing: -.03em; }
-        .process-card svg { color: var(--muted); }
-        .cta-section { padding-bottom: 110px; }
-        .cta-card { background: var(--panel); color: var(--panelText); border-radius: 40px; padding: clamp(34px, 6vw, 70px); display: grid; grid-template-columns: 1fr auto; gap: 30px; align-items: end; position: relative; overflow: hidden; }
-        .cta-card::before { content: ""; position: absolute; width: 360px; height: 360px; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--panelText) 15%, transparent); right: -110px; top: -130px; }
-        .cta-card h2 {
-          font-size: clamp(38px, 6vw, 76px);
-          letter-spacing: -.07em;
-          line-height: .95;
-          margin: 0 0 18px;
-          max-width: 780px;
-          position: relative;
-          z-index: 1;
-          color: var(--panelText); /* FIX contrast */
-        }
-        .cta-card p { color: color-mix(in srgb, var(--panelText) 72%, transparent); font-size: 18px; line-height: 1.7; margin: 0; max-width: 620px; position: relative; z-index: 1; }
-        .cta-card .btn { border-color: var(--panelText); position: relative; z-index: 1; white-space: nowrap; color: var(--panelText); }
-        footer { border-top: 1px solid var(--line); padding: 26px 0; color: var(--muted); font-size: 14px; }
-        .footer-inner { display: flex; justify-content: space-between; gap: 20px; }
-        @media (max-width: 980px) {
-          .hero-grid, .cta-card { grid-template-columns: 1fr; }
-          .service-grid { grid-template-columns: repeat(2,1fr); }
-          .section-head { align-items: flex-start; flex-direction: column; }
-        }
-        @media (max-width: 720px) {
-          .container { width: min(100% - 28px, 1160px); padding:0px; }
-          .nav-links, .nav-cta { display: none; }
-          .menu-btn { display: inline-grid; place-items: center; }
-          .mobile-menu { display: grid; gap: 14px; padding: 0 0 22px; font-size: 15px; }
-          .mobile-menu a { padding: 12px 0; border-bottom: 1px solid var(--line); }
-          .hero { padding-top: 54px; }
-          .profile-panel { min-height: 390px; }
-          .panel-title h2 { font-size: 42px; }
-          .stats, .service-grid, .project-grid { grid-template-columns: 1fr; }
-          .project-tools { align-items: stretch; }
-          .search-box { width: 100%; }
-          .process-card { grid-template-columns: 58px 1fr; }
-          .process-card svg { display: none; }
-          .process-card p { font-size: 17px; }
-          .footer-inner { flex-direction: column; }
-        }
-      `}</style>
+export default function App() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [motionPaused, setMotionPaused] = useState(false);
 
-      <nav className="nav">
-        <div className="container nav-inner">
-          <a className="brand" href="#top">
-            <span className="brand-mark">
-              <img src={profilePhoto} alt="Anthony Lopez" />
-            </span>
-            <span>Anthony Mark Lopez</span>
+  useEffect(() => {
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (reduce.matches || !('IntersectionObserver' in window)) return;
+    document.documentElement.classList.add('motion-enabled');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .12, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach((node) => observer.observe(node));
+    return () => { observer.disconnect(); document.documentElement.classList.remove('motion-enabled'); };
+  }, []);
+
+  return (
+    <div className={`site-shell ${motionPaused ? 'motion-paused' : ''}`}>
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <header className="site-header">
+        <div className="container header-inner">
+          <a href="#top" className="brand" aria-label="Anthony Mark Lopez — Home" onClick={() => setMobileMenuOpen(false)}>
+            <img src={profilePhoto} alt="" className="brand-avatar" />
+            <span className="brand-copy"><strong>Anthony Mark Lopez</strong><small>Digital Solutions Specialist</small></span>
           </a>
-
-          <div className="nav-links">
-            {navItems.map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`}>{item}</a>
-            ))}
-          </div>
-
-          <div className="nav-actions">
-            <button className="icon-btn" onClick={() => setDarkMode(!darkMode)} aria-label="Toggle dark mode">
-              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          <nav className={`main-nav ${mobileMenuOpen ? 'open' : ''}`} id="main-navigation" aria-label="Main navigation">
+            {nav.map((item) => item.title === 'Solutions' ? (
+              <details className="solutions-nav-menu" key={item.href}>
+                <summary>Solutions <ChevronDown size={15} aria-hidden="true" /></summary>
+                <div className="solutions-nav-panel">
+                  <a href="#solutions" onClick={() => setMobileMenuOpen(false)}>View all solutions</a>
+                  {solutions.map(s => <a key={s.slug} href={solutionHref(s.slug)} onClick={() => setMobileMenuOpen(false)}>{s.name}</a>)}
+                </div>
+              </details>
+            ) : <a key={item.href} href={item.href} onClick={() => setMobileMenuOpen(false)}>{item.title}</a>)}
+            <a className="nav-mobile-contact" href="#contact" onClick={() => setMobileMenuOpen(false)}>Discuss Your Project <ArrowUpRight size={16} /></a>
+          </nav>
+          <div className="header-actions">
+            <a className="button button-primary nav-contact" href="#contact">Get a Free Consultation <ArrowUpRight size={17} aria-hidden="true" /></a>
+            <button className="menu-button" type="button" aria-controls="main-navigation" aria-expanded={mobileMenuOpen} aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'} onClick={() => setMobileMenuOpen((previous) => !previous)}>
+              {mobileMenuOpen ? <X size={25} /> : <Menu size={25} />}
             </button>
-            <a className="nav-cta" href="mailto:lopez.anthonymark16@gmail.com">
-              Work with me <ArrowUpRight size={16} />
-            </a>
-            <button className="menu-btn" onClick={() => setOpen(!open)} aria-label="Toggle menu">
-              {open ? <X /> : <Menu />}
-            </button>
           </div>
-        </div>
-
-        {open && (
-          <div className="container mobile-menu">
-            {navItems.map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} onClick={() => setOpen(false)}>{item}</a>
-            ))}
-          </div>
-        )}
-      </nav>
-
-      <header className="hero" id="top">
-        <div className="container hero-grid">
-          <div>
-            <span className="eyebrow"><Sparkles size={15} /> Fullstack Web Developer • Designer • Creative Builder</span>
-            <h1>Designing digital products that look clean, work fast, and convert better<span>.</span></h1>
-            <p>
-              I create professional websites, custom web applications, WordPress solutions, e-commerce platforms, PWAs, and brand-focused graphics for businesses that need both strong visuals and reliable functionality.
-            </p>
-            <div className="hero-actions">
-              <a className="btn btn-dark" href="#projects">View Selected Work <ArrowUpRight size={17} /></a>
-              <a className="btn btn-light" href="#contact">Start a Project</a>
-            </div>
-          </div>
-
-          <div className="hero-card">
-            <div className="profile-panel">
-              <div className="panel-top">
-                <PenTool />
-                <span className="availability">Available for Projects</span>
-              </div>
-              <div className="floating-stack">
-                <span className="floating-pill"><Zap size={14} /> Fast websites</span>
-                <span className="floating-pill"><CheckCircle2 size={14} /> Business-ready UI</span>
-              </div>
-              <div className="panel-title">
-                <h2>Web. App. Brand.</h2>
-                <p>One creative technical partner for development, design, optimization, and digital growth.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="container stats">
-          <div className="stat"><strong>6+</strong><span>Years in Web Development</span></div>
-          <div className="stat"><strong>3-in-1</strong><span>Developer, Designer, Creative</span></div>
-          <div className="stat"><strong>100%</strong><span>Mobile-first Execution</span></div>
         </div>
       </header>
 
-      <section id="services">
-        <div className="container">
-          <div className="section-head">
-            <h2>Strategic services for brands that need more than just a template.</h2>
-            <p>I combine development, design, and marketing awareness to build digital experiences that are polished, practical, and business-ready.</p>
-          </div>
-
-          <div className="service-grid">
-            {services.map((service) => (
-              <article className="service-card" key={service.title}>
-                <div className="service-icon">{service.icon}</div>
-                <h3>{service.title}</h3>
-                <p>{service.desc}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="skills">
-        <div className="container">
-          <div className="section-head">
-            <h2>Tools and technologies I use to turn ideas into finished products.</h2>
-            <p>From modern front-end stacks to WordPress, WooCommerce, Firebase, visual design, and content-ready creative assets.</p>
-          </div>
-
-          <div className="skills-wrap">
-            {skills.map((skill) => <span className="skill-pill" key={skill}>{skill}</span>)}
-          </div>
-        </div>
-      </section>
-
-      <section id="projects">
-        <div className="container">
-          <div className="section-head">
-            <h2>Interactive project gallery with real visual previews.</h2>
-            <p>Filter by category or search by keyword to explore selected project directions and capabilities.</p>
-          </div>
-
-          <div className="project-tools">
-            <div className="category-tabs">
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  className={`tab ${activeCategory === category ? "active" : ""}`}
-                  onClick={() => setActiveCategory(category)}
-                >
-                  {category}
-                </button>
-              ))}
+      <main id="main-content">
+        <section className="hero" id="top">
+          <div className="hero-glow hero-glow-one" aria-hidden="true" />
+          <div className="hero-glow hero-glow-two" aria-hidden="true" />
+          <div className="container hero-grid">
+            <div className="hero-copy">
+              <span className="eyebrow"><Sparkles size={15} aria-hidden="true" /> YOUR DIGITAL GROWTH PARTNER</span>
+              <h1>Build better websites. <span>Automate smarter.</span> Grow with confidence.</h1>
+              <p>One reliable partner for GoHighLevel, web development, graphic design, social media management, and technical support—solutions focused on helping your business work better and grow.</p>
+              <div className="hero-actions">
+                <a className="button button-primary" href="#contact">Get a Free Consultation <ArrowUpRight size={18} aria-hidden="true" /></a>
+                <a className="button button-outline" href="#solutions">Explore Solutions <ArrowRight size={18} aria-hidden="true" /></a>
+              </div>
+              <div className="hero-assurances">
+                <span><CircleCheck size={17} />Business-focused solutions</span>
+                <span><CircleCheck size={17} />End-to-end support</span>
+                <span><CircleCheck size={17} />Remote collaboration</span>
+              </div>
             </div>
-
-            <label className="search-box">
-              <Search size={16} />
-              <input
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search projects..."
-              />
-            </label>
+            <div className="hero-visual">
+              <div className="flow-topline"><span>FROM SOLUTIONS TO GROWTH</span><button type="button" aria-pressed={motionPaused} className="motion-toggle" onClick={() => setMotionPaused((value) => !value)}>{motionPaused ? <Play size={15} /> : <Pause size={15} />}{motionPaused ? 'Play motion' : 'Pause motion'}</button></div>
+              <FlowDiagram paused={motionPaused} />
+            </div>
           </div>
+        </section>
 
-          {filteredProjects.length > 0 ? (
-            <div className="project-grid">
-              {filteredProjects.map((project) => (
-                <article className="project-card" key={project.title}>
-                  <div className="project-image">
-                    <img src={project.image} alt={project.title} />
-                    <div className="project-overlay">
-                      <span className="category">{project.category}</span>
-                      <a href={project.url} aria-label={`View ${project.title}`}><ExternalLink size={20} /></a>
-                    </div>
-                  </div>
-                  <div className="project-body">
-                    <div>
-                      <h3>{project.title}</h3>
-                      <p>{project.desc}</p>
-                    </div>
-                    <div className="project-tags">
-                      {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
-                    </div>
-                  </div>
+        <section className="capability-strip" aria-label="Platforms and capabilities">
+          <div className="container strip-inner">
+            <span>TOOLS & PLATFORMS</span>
+            <div className="strip-tools"><b>GoHighLevel</b><b>WordPress</b><b>Shopify</b><b>React / Next.js</b><b>Supabase</b><b>Canva / Adobe</b></div>
+          </div>
+        </section>
+
+        <section className="section services-section" id="solutions">
+          <div className="container">
+            <div className="section-head reveal"><div><span className="section-kicker">01 / BUSINESS SOLUTIONS</span><h2>Solutions designed for growth.<br /><span>One dependable partner.</span></h2></div><p>Explore practical solutions to attract customers, improve operations, and grow with confidence.</p></div>
+            <div className="service-grid">
+              {services.map((service) => {
+                const Icon = service.icon;
+                return <article className={`service-card reveal ${service.featured ? 'featured' : ''}`} key={service.name}>
+                  <div className="service-top"><span className="service-icon"><Icon size={26} aria-hidden="true" /></span>{service.featured && <span className="featured-tag">CORE SERVICE</span>}</div>
+                  <h3>{service.name}</h3><p>{service.description}</p>
+                  <a href={solutionHref(solutions[services.indexOf(service)].slug)} className="inline-link">Explore Solution <ArrowUpRight size={17} aria-hidden="true" /></a>
+                </article>;
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="web-section" id="web">
+          <div className="container web-layout">
+            <div className="web-intro reveal">
+              <span className="section-kicker light">02 / WEB SPECIALIST</span>
+              <h2>Your website should do more than <em>look good.</em></h2>
+              <p>Whether you need an online storefront, a high-converting landing page, or a custom system built around your team, I handle the strategy, development, and technical details.</p>
+              <a href="/solutions/web-development" className="button button-white">Explore Web Solutions <ArrowUpRight size={18} aria-hidden="true" /></a>
+            </div>
+            <div className="web-services-grid">
+              {webServices.map((service) => {
+                const Icon = service.icon;
+                return <article className="web-card reveal" key={service.name}><span className="web-card-icon"><Icon size={23} aria-hidden="true" /></span><h3>{service.name}</h3><p>{service.text}</p></article>;
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="section work-section" id="work">
+          <div className="container">
+            <div className="section-head reveal"><div><span className="section-kicker">03 / SELECTED WORK</span><h2>Built for real businesses.<br /><span>Designed for real workflows.</span></h2></div><p>A few practical examples of custom systems and digital experiences I've worked on.</p></div>
+            <div className="work-grid">
+              {projects.map((project) => (
+                <article className="project-card reveal" key={project.title}>
+                  {project.image ? <div className="project-media"><img src={project.image} alt={project.alt} loading="lazy" /></div> :
+                    <div className="project-media project-pos" role="img" aria-label="Illustrative point-of-sale dashboard graphic">
+                      <div className="pos-browser"><span className="pos-dots">● ● ●</span><div className="pos-header">Eagles-Wings <small>POS Overview</small></div><div className="pos-tiles"><i /><i /><i /></div><div className="pos-chart"><i /><i /><i /><i /><i /><i /><i /><i /></div></div>
+                    </div>}
+                  <div className="project-content"><span className="project-category">{project.label}</span><h3>{project.title}</h3><p>{project.description}</p><a href={project.href} target="_blank" rel="noopener noreferrer" className="inline-link">Visit project <ExternalLink size={16} aria-hidden="true" /></a></div>
                 </article>
               ))}
             </div>
-          ) : (
-            <div className="empty-state">No projects found. Try another keyword or category.</div>
-          )}
-        </div>
-      </section>
-
-      <section id="process">
-        <div className="container">
-          <div className="section-head">
-            <h2>A clear build process from idea to launch.</h2>
-            <p>Every project is handled with structure, clean execution, and attention to business goals.</p>
           </div>
+        </section>
 
-          <div className="process-list">
-            {process.map((item) => <div className="process-card" key={item}><p>{item}</p><CheckCircle2 size={22} /></div>)}
-          </div>
-        </div>
-      </section>
-
-      <section className="cta-section" id="contact">
-        <div className="container">
-          <div className="cta-card">
-            <div>
-              <h2>Need a website, system, or creative campaign that feels premium?</h2>
-              <p>Let’s build a custom digital solution that fits your business, looks professional, and performs across every device.</p>
+        <section className="section process-section" id="process">
+          <div className="container">
+            <div className="section-head reveal"><div><span className="section-kicker">04 / HOW WE WORK</span><h2>Clear steps.<br /><span>Less friction.</span></h2></div><p>A straightforward process that starts with your business problem and ends with a practical deliverable.</p></div>
+            <div className="process-grid">
+              {[
+                ['01', 'Discover', 'Share your goals, pain points, existing tools, and what success looks like.'],
+                ['02', 'Plan', 'Define the solution, deliverables, timeline, and checkpoints before building.'],
+                ['03', 'Build', 'Design, develop, integrate, and refine with clear communication.'],
+                ['04', 'Launch & support', 'Test the outcome, hand over the work, and plan any continued support.'],
+              ].map(([number, title, description]) => <article className="process-card reveal" key={number}><span className="process-number">{number}</span><h3>{title}</h3><p>{description}</p><span className="process-arrow"><ArrowUpRight size={20} aria-hidden="true" /></span></article>)}
             </div>
-            <a className="btn btn-light" href="mailto:lopez.anthonymark16@gmail.com">
-              <Mail size={18} /> Contact Me
-            </a>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <footer>
-        <div className="container footer-inner">
-          <span>© {new Date().getFullYear()} Anthony Mark Lopez. Portfolio Website.</span>
-          <span>Web Development • Web Design • Graphic Design</span>
-        </div>
-      </footer>
-    </main>
+        <section className="section faq-section" id="faq">
+          <div className="container faq-grid">
+            <div className="reveal"><span className="section-kicker">05 / COMMON QUESTIONS</span><h2>Answers before we get started.</h2><p>Everything you need to know about solutions, how we can work together, and what happens next.</p><a href="#contact" className="inline-link">Still have questions? Let's talk <ArrowUpRight size={17} aria-hidden="true" /></a></div>
+            <div className="faq-items reveal">{faqs.map((faq, i) => <details key={faq.question} open={i === 0}><summary>{faq.question}<ChevronDown size={18} aria-hidden="true" /></summary><p>{faq.answer}</p></details>)}</div>
+          </div>
+        </section>
+
+        <section className="contact-section" id="contact">
+          <div className="container contact-grid">
+            <div className="contact-copy reveal">
+              <span className="section-kicker light">06 / LET'S WORK TOGETHER</span>
+              <h2>Have something in mind?<br /><span>Let's make it happen.</span></h2>
+              <p>Tell me what you're trying to build, improve, or automate. We'll discuss the most practical next step for your business.</p>
+              <div className="contact-steps"><span><Check size={17} /> Share your goals</span><span><Check size={17} /> Identify the right solutions</span><span><Check size={17} /> Define the next steps</span></div>
+              <div className="contact-email"><Mail size={19} /><a href={`mailto:${EMAIL}`}>{EMAIL}</a></div>
+            </div>
+            <ContactForm />
+          </div>
+        </section>
+      </main>
+
+      <footer className="footer"><div className="container footer-inner"><a href="#top" className="footer-brand"><img src={profilePhoto} alt="" /> Anthony Mark Lopez</a><span>Digital solutions · Web · GHL · Design · Support</span><span>© {new Date().getFullYear()} All rights reserved.</span></div></footer>
+      <a href="#contact" className="mobile-sticky-cta"><CalendarDays size={17} aria-hidden="true" /> Discuss Your Project <ArrowUpRight size={16} aria-hidden="true" /></a>
+    </div>
   );
 }
