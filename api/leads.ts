@@ -94,11 +94,21 @@ async function sendEmail(payload: Record<string, unknown>, idempotencyKey: strin
 }
 
 export async function POST(request: Request) {
-  // Do not allow credentials or contact details to be handled by the browser.
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SECRET_KEY ||
-      !process.env.RESEND_API_KEY || !process.env.RESEND_FROM_EMAIL ||
-      !process.env.LEAD_NOTIFICATION_EMAIL || !process.env.LEAD_HASH_SALT) {
-    console.error('Lead capture is missing server-side configuration.');
+  // Email is optional: leads must still be saved when the owner has no verified domain.
+  // 'testing' only sends to the email address registered with the Resend account.
+  const emailMode = (process.env.RESEND_MODE || 'off').toLowerCase();
+  if (!['off', 'testing', 'verified'].includes(emailMode)) {
+    console.error('Invalid RESEND_MODE configuration.');
+    return response({ error: 'Inquiry submission is temporarily unavailable. Please try again later.' }, 503);
+  }
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SECRET_KEY || !process.env.LEAD_HASH_SALT ||
+      process.env.LEAD_HASH_SALT.length < 32) {
+    console.error('Lead capture is missing required Supabase configuration.');
+    return response({ error: 'Inquiry submission is temporarily unavailable. Please try again later.' }, 503);
+  }
+  if (emailMode !== 'off' && (!process.env.RESEND_API_KEY || !process.env.LEAD_NOTIFICATION_EMAIL ||
+      (emailMode === 'verified' && !process.env.RESEND_FROM_EMAIL))) {
+    console.error('Resend is enabled but email settings are incomplete.');
     return response({ error: 'Inquiry submission is temporarily unavailable. Please try again later.' }, 503);
   }
 
@@ -165,31 +175,33 @@ export async function POST(request: Request) {
     const safeCompany = escaped(lead.company || 'Not supplied');
     const safeSolution = escaped(lead.solution);
     const safeSource = escaped(lead.source_path);
-    const sender = process.env.RESEND_FROM_EMAIL as string;
+    const sender = emailMode === 'testing' ? 'onboarding@resend.dev' : (process.env.RESEND_FROM_EMAIL as string);
     const recipient = process.env.LEAD_NOTIFICATION_EMAIL as string;
     const base = `<!doctype html><html><body style="font-family:Arial,sans-serif;color:#1c2b4a;line-height:1.65">`;
 
     const [notify, acknowledge] = await Promise.allSettled([
-      sendEmail({
+      emailMode === 'off' ? Promise.resolve(null) : sendEmail({
         from: sender,
         to: [recipient],
-        reply_to: lead.email,
+        ...(emailMode === 'verified' ? { reply_to: lead.email } : {}),
         subject: `New website inquiry: ${lead.solution}`,
         html: `${base}<h2>New consultation inquiry</h2><p><b>Name:</b> ${safeName}<br><b>Email:</b> ${safeEmail}<br><b>Company / website:</b> ${safeCompany}<br><b>Solution:</b> ${safeSolution}<br><b>Source:</b> ${safeSource}</p><h3>Project details</h3><p>${safeMessage}</p><p>Lead reference: ${escaped(id)}</p></body></html>`,
         text: `New website inquiry\nName: ${lead.name}\nEmail: ${lead.email}\nCompany: ${lead.company || 'Not supplied'}\nSolution: ${lead.solution}\nSource: ${lead.source_path}\n\n${lead.message}\n\nLead ID: ${id}`,
       }, `portfolio-lead-${id}-notify`),
-      sendEmail({
+      emailMode === 'verified' ? sendEmail({
         from: sender,
         to: [lead.email],
         reply_to: recipient,
         subject: 'Thanks for your inquiry — Anthony Mark Lopez',
         html: `${base}<p>Hi ${safeName},</p><p>Thanks for reaching out about <strong>${safeSolution}</strong>. I've received your project details and will review them.</p><p>I'll reply to this email when I have an update.</p><p>Best,<br>Anthony Mark Lopez</p></body></html>`,
         text: `Hi ${lead.name},\n\nThanks for reaching out about ${lead.solution}. I've received your project details and will review them.\n\nBest,\nAnthony Mark Lopez`,
-      }, `portfolio-lead-${id}-ack`),
+      }, `portfolio-lead-${id}-ack`) : Promise.resolve(null),
     ]);
 
-    const notificationStatus = notify.status === 'fulfilled' && notify.value ? 'sent' : 'failed';
-    const acknowledgementStatus = acknowledge.status === 'fulfilled' && acknowledge.value ? 'sent' : 'failed';
+    const notificationStatus = emailMode === 'off' ? 'skipped' :
+      notify.status === 'fulfilled' && notify.value ? 'sent' : 'failed';
+    const acknowledgementStatus = emailMode !== 'verified' ? 'skipped' :
+      acknowledge.status === 'fulfilled' && acknowledge.value ? 'sent' : 'failed';
 
     // Lead remains saved even if an email provider is temporarily unavailable.
     try {
