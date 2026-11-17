@@ -199,7 +199,7 @@ function ContactForm() {
         return;
       }
       setStatus('success');
-      setFeedback('Thanks! Your inquiry has been received. An acknowledgment email will be sent if delivery is available.');
+      setFeedback(result.message || 'Thanks! Your inquiry has been saved. I will review it and follow up by email.');
       form.reset();
     } catch {
       setStatus('error');
