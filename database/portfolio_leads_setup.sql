@@ -17,8 +17,8 @@ create table if not exists public.portfolio_leads (
   source_path text not null default '/',
   consent_to_contact boolean not null check (consent_to_contact = true),
   status text not null default 'new' check (status in ('new','contacted','qualified','closed','spam')),
-  notification_status text not null default 'pending' check (notification_status in ('pending','sent','failed')),
-  acknowledgement_status text not null default 'pending' check (acknowledgement_status in ('pending','sent','failed'))
+  notification_status text not null default 'pending' check (notification_status in ('pending','sent','failed','skipped')),
+  acknowledgement_status text not null default 'pending' check (acknowledgement_status in ('pending','sent','failed','skipped'))
 );
 
 create index if not exists portfolio_leads_created_at_idx
